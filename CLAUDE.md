@@ -86,3 +86,5 @@ The user wants a **complete custom theme** covering everything — this is plann
 - `lazy-lock.json` is excluded via `.config/nvim/.gitignore`
 - Sway's `$term` variable resolves at parse time — use `unbindsym` + `bindsym` to override keybindings from system config without warnings
 - `tuned-ppd` conflicts with TLP — do not install TLP on this system
+- VS Code sync: `password-store=basic` em `~/.vscode/argv.json` (salvo como `.vscode-argv.json` no repo). `gnome-libsecret` foi tentado mas o keyring não exporta `GNOME_KEYRING_CONTROL` no Sway — `basic` resolveu. O `95-gnome-keyring.conf` no Sway ainda é útil para SSH e outros apps
+- `systemctl restart systemd-logind` mata a sessão ativa — nunca rodar isso com usuário logado. Mudanças no logind só via reboot

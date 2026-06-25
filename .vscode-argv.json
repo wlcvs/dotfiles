@@ -18,5 +18,5 @@
 	// Do not edit this value.
 	"crash-reporter-id": "f8f94d95-3da1-42eb-b7e9-dff389db58ea",
 
-	"password-store": "gnome-libsecret"
+	"password-store": "basic"
 }
