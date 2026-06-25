@@ -1,7 +1,7 @@
-# Inicia o tmux automaticamente (reusa sessão "main" se já existir)
+# Cada Alacritty inicia sua própria sessão tmux independente
 [terminal.shell]
 program = "/usr/bin/zsh"
-args = ["-c", "tmux new-session -A -s main"]
+args = ["-c", "tmux new-session"]
 
 [font]
 size = 11.0
