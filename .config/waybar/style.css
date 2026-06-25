@@ -14,14 +14,15 @@ window#waybar {
     border-bottom: 1px solid #18181b;
 }
 
+/* Workspaces */
 #workspaces {
-    padding: 0 8px;
+    padding: 0 6px;
 }
 
 #workspaces button {
     color: #3f3f46;
     background: transparent;
-    padding: 0 6px;
+    padding: 0 8px;
     border-bottom: 1px solid transparent;
 }
 
@@ -40,26 +41,46 @@ window#waybar {
     box-shadow: none;
 }
 
+/* Sway mode */
 #mode {
     color: #a1a1aa;
-    padding: 0 8px;
+    padding: 0 10px;
     letter-spacing: 0.1em;
     font-size: 10px;
 }
 
+/* Window title */
 #window {
     color: #3f3f46;
     font-size: 10px;
 }
 
-#clock,
-#battery,
+/* Todos os módulos da direita */
+#cpu,
+#memory,
+#temperature,
+#backlight,
+#pulseaudio,
 #network,
-#pulseaudio {
+#battery,
+#clock {
     padding: 0 10px;
     color: #71717a;
     letter-spacing: 0.05em;
     font-size: 10px;
+}
+
+/* Separadores visuais — borda esquerda fina a cada 2 grupos */
+#temperature {
+    border-left: 1px solid #18181b;
+}
+
+#pulseaudio {
+    border-left: 1px solid #18181b;
+}
+
+#battery {
+    border-left: 1px solid #18181b;
 }
 
 #clock {

@@ -2,9 +2,9 @@
     monitor = 0
     follow = mouse
     width = 320
-    height = 100
+    height = (0, 100)
     origin = top-right
-    offset = 12x12
+    offset = (12, 12)
     scale = 0
     notification_limit = 5
     progress_bar = false
