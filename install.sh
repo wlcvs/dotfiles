@@ -72,6 +72,11 @@ ln -sf "$DOTFILES/.p10k.zsh"   ~/
 sudo cp "$DOTFILES/applications/"*.desktop /usr/local/share/applications/
 sudo update-desktop-database /usr/local/share/applications/
 
+# Esconde apps indesejados do Rofi
+mkdir -p ~/.local/share/applications
+cp "$DOTFILES/applications/hidden/"*.desktop ~/.local/share/applications/
+update-desktop-database ~/.local/share/applications/
+
 # VS Code argv.json
 mkdir -p ~/.vscode
 cp "$DOTFILES/.vscode-argv.json" ~/.vscode/argv.json
