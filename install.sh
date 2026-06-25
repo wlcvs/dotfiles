@@ -68,6 +68,35 @@ ln -sf "$DOTFILES/.tmux.conf"  ~/
 ln -sf "$DOTFILES/.zshrc"      ~/
 ln -sf "$DOTFILES/.p10k.zsh"   ~/
 
+# TUI apps desktop files (aparecem no Rofi)
+mkdir -p ~/.local/share/applications
+for f in "$DOTFILES/applications/"*.desktop; do
+  ln -sf "$f" ~/.local/share/applications/
+done
+update-desktop-database ~/.local/share/applications/
+
+# VS Code argv.json
+mkdir -p ~/.vscode
+cp "$DOTFILES/.vscode-argv.json" ~/.vscode/argv.json
+
+echo ""
+echo "==> Installing TUI apps not in dnf..."
+# yazi
+curl -fsSL https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-musl.zip -o /tmp/yazi.zip
+unzip -o /tmp/yazi.zip -d /tmp/yazi-extract/
+cp /tmp/yazi-extract/yazi-x86_64-unknown-linux-musl/yazi ~/.local/bin/
+cp /tmp/yazi-extract/yazi-x86_64-unknown-linux-musl/ya ~/.local/bin/
+chmod +x ~/.local/bin/yazi ~/.local/bin/ya
+
+# bluetuith
+BT_URL=$(curl -fsSL https://api.github.com/repos/bluetuith-org/bluetuith/releases/latest | python3 -c "import json,sys; r=json.load(sys.stdin); [print(a['browser_download_url']) for a in r['assets'] if 'Linux' in a['name'] and 'x86_64' in a['name']]" | head -1)
+curl -fsSL "$BT_URL" -o /tmp/bluetuith.tar.gz
+tar -xzf /tmp/bluetuith.tar.gz -C /tmp/
+cp /tmp/bluetuith ~/.local/bin/ && chmod +x ~/.local/bin/bluetuith
+
+# pulsemixer
+pip3 install pulsemixer --user
+
 echo ""
 echo "==> Done! Next steps:"
 echo "    1. Reboot (applies logind power config)"
