@@ -68,12 +68,9 @@ ln -sf "$DOTFILES/.tmux.conf"  ~/
 ln -sf "$DOTFILES/.zshrc"      ~/
 ln -sf "$DOTFILES/.p10k.zsh"   ~/
 
-# TUI apps desktop files (aparecem no Rofi)
-mkdir -p ~/.local/share/applications
-for f in "$DOTFILES/applications/"*.desktop; do
-  ln -sf "$f" ~/.local/share/applications/
-done
-update-desktop-database ~/.local/share/applications/
+# TUI apps desktop files em /usr/local/share (já está no XDG_DATA_DIRS por padrão)
+sudo cp "$DOTFILES/applications/"*.desktop /usr/local/share/applications/
+sudo update-desktop-database /usr/local/share/applications/
 
 # VS Code argv.json
 mkdir -p ~/.vscode
