@@ -1,77 +1,116 @@
 # dotfiles
 
-Configuração pessoal para **Fedora 44 Sway** em ThinkPad.
+Personal configuration for **Fedora 44 Sway** on a ThinkPad.
 
 ## Stack
 
-| Função | Ferramenta |
+| Role | Tool |
 |---|---|
 | Compositor | Sway |
 | Terminal | Alacritty |
-| Multiplexador | tmux |
+| Multiplexer | tmux |
 | Shell | zsh + Powerlevel10k |
-| Editor | Neovim |
+| Editor | Neovim (lazy.nvim) |
 | Launcher | Rofi |
-| Barra | Waybar |
-| Notificações | Dunst |
+| Bar | Waybar |
+| Notifications | Dunst |
 | Screenshots | Grimshot (grim + slurp) |
-| Áudio | PipeWire |
-| Tema | Catppuccin Mocha |
+| Audio | PipeWire |
+| Theme | Catppuccin Mocha |
 
-## Instalação
+## Installation
 
 ```bash
-git clone https://github.com/wlcsv/dotfiles.git ~/dotfiles
+git clone https://github.com/wlcvs/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 chmod +x install.sh
 ./install.sh
 ```
 
-Após instalar, rode `p10k configure` no terminal para personalizar o prompt.
+After installing, run `p10k configure` to set up the prompt style.
 
-## Atalhos — Sway
+## Keybindings — Sway
 
-| Atalho | Ação |
+| Shortcut | Action |
 |---|---|
-| `Super+Enter` | Abre Alacritty (com tmux) |
-| `Super+D` | Launcher (Rofi) |
-| `Super+Shift+Q` | Fecha janela |
-| `Super+Shift+E` | Sair do Sway |
-| `Super+Shift+C` | Recarrega config |
+| `Super+Enter` | Open Alacritty (with tmux) |
+| `Super+D` | App launcher (Rofi) |
+| `Super+Shift+Q` | Close window |
+| `Super+Shift+E` | Exit Sway |
+| `Super+Shift+C` | Reload config |
 | `Super+F` | Fullscreen |
-| `Super+Shift+Space` | Alterna flutuante |
-| `Super+1..0` | Troca workspace |
-| `Super+Shift+1..0` | Move janela para workspace |
-| `Super+H/J/K/L` | Foco (estilo vim) |
-| `Super+Shift+H/J/K/L` | Move janela |
+| `Super+Shift+Space` | Toggle floating |
+| `Super+1..0` | Switch workspace |
+| `Super+Shift+1..0` | Move window to workspace |
+| `Super+H/J/K/L` | Focus (vim-style) |
+| `Super+Shift+H/J/K/L` | Move window |
 | `Super+B` | Split horizontal |
 | `Super+V` | Split vertical |
-| `Super+R` | Modo resize |
+| `Super+R` | Resize mode |
 | `Super+Minus` | Scratchpad |
 
-## Atalhos — Screenshots
+## Keybindings — Screenshots
 
-| Atalho | Ação |
+| Shortcut | Action |
 |---|---|
-| `Print` | Tela inteira → salva em `~/Imagens` |
-| `Alt+Print` | Janela ativa → salva em `~/Imagens` |
-| `Ctrl+Print` | Seleciona área → salva em `~/Imagens` |
-| `Shift+Print` | Seleciona área → copia para clipboard |
+| `Print` | Full screen → saves to `~/Imagens` |
+| `Alt+Print` | Active window → saves to `~/Imagens` |
+| `Ctrl+Print` | Select area → saves to `~/Imagens` |
+| `Shift+Print` | Select area → copies to clipboard |
 
-## Atalhos — tmux
+## Keybindings — tmux
 
 Prefix: `Ctrl+A`
 
-| Atalho | Ação |
+| Shortcut | Action |
 |---|---|
-| `Prefix + \|` | Split vertical |
-| `Prefix + -` | Split horizontal |
-| `Prefix + C` | Nova janela |
-| `Alt+Seta` | Navegar entre painéis |
-| `Prefix + R` | Recarregar config |
+| `Prefix + \|` | Vertical split |
+| `Prefix + -` | Horizontal split |
+| `Prefix + C` | New window |
+| `Alt+Arrow` | Navigate panes |
+| `Prefix + R` | Reload config |
 
-## Teclado
+## Keybindings — Neovim
 
-- Layout: **Português Brasil (ThinkPad ABNT2)**
+Leader key: `Space`
+
+### General
+
+| Key | Action |
+|---|---|
+| `<C-s>` | Save file |
+| `<C-q>` | Quit |
+| `<Leader>e` | Toggle file explorer |
+| `<Leader>fmt` | Format buffer |
+
+### Telescope
+
+| Key | Action |
+|---|---|
+| `<Leader>ff` | Find files |
+| `<Leader>fg` | Live grep |
+| `<Leader>fb` | List buffers |
+| `<Leader>fh` | Help tags |
+
+### Harpoon
+
+| Key | Action |
+|---|---|
+| `<Leader>a` | Add file |
+| `<Leader>r` | Remove file |
+| `<C-e>` | Quick menu |
+| `<C-p>` / `<C-n>` | Previous / next file |
+
+### Autocomplete
+
+| Key | Action |
+|---|---|
+| `<C-Space>` | Trigger autocomplete |
+| `<CR>` | Confirm selection |
+| `<Tab>` / `<S-Tab>` | Next / previous item |
+
+## Keyboard
+
+- Layout: **Portuguese Brazil (ThinkPad ABNT2)**
 - `Caps Lock` → `Esc`
 - `Esc` → `Caps Lock`
