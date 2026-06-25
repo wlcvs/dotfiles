@@ -8,14 +8,14 @@ The goal is a definitive setup script — never having to reconfigure from scrat
 - **OS:** Fedora 44 Sway (Wayland)
 - **Hardware:** ThinkPad (TPPS/2 Elan TrackPoint + Synaptics touchpad)
 - **User:** wlcsv
-- **Shell:** zsh (default), bash available
+- **Shell:** zsh with Powerlevel10k (`.p10k.zsh` committed)
 - **GitHub account:** wlcvs
 
 ## What's already configured
 
 ### Sway (`~/.config/sway/config.d/`)
 - `00-input.conf` — keyboard layout `br/thinkpad` (ABNT2), caps↔esc swap, touchpad tap + natural scroll
-- `01-terminal.conf` — sets Alacritty as default terminal, overrides `Super+Enter`
+- `01-terminal.conf` — Alacritty as default terminal (`unbindsym` + rebind to avoid warning), Rofi set to `drun` only (no PATH executables)
 - `60-bindings-screenshot.conf` — grimshot with dunst notifications
 
 ### Alacritty (`~/.config/alacritty/alacritty.toml`)
@@ -26,13 +26,13 @@ The goal is a definitive setup script — never having to reconfigure from scrat
 
 ### tmux (`~/.tmux.conf`)
 - Prefix: `Ctrl+A`
-- Mouse on, clipboard via `wl-copy` on drag
+- Mouse on, clipboard via `wl-copy` on drag-select
 - Catppuccin Mocha status bar
 
 ### zsh (`~/.zshrc`)
-- Powerlevel10k theme (cloned to `~/.config/powerlevel10k`)
+- Powerlevel10k (cloned to `~/.config/powerlevel10k`, config at `~/.p10k.zsh`)
 - Fonts: MesloLGS NF at `~/.local/share/fonts/MesloLGS/`
-- `vi`/`vim` aliased to `nvim`
+- Aliases: `n=nvim`, `vi=nvim`, `vim=nvim`
 
 ### Neovim (`~/.config/nvim/`)
 - Plugin manager: lazy.nvim
@@ -41,33 +41,48 @@ The goal is a definitive setup script — never having to reconfigure from scrat
 - Key plugins: telescope, harpoon2, nvim-tree, treesitter, nvim-cmp, conform
 - Theme: tokyonight
 
+### GTK (`~/.config/gtk-3.0/` and `~/.config/gtk-4.0/`)
+- Dark mode enabled (`gtk-application-prefer-dark-theme=1`)
+- Using Adwaita-dark as placeholder — **full custom theme is planned later**
+- gsettings: `color-scheme=prefer-dark`, `gtk-theme=Adwaita-dark`
+
+### Bluetooth
+- `bluez` + `blueman` installed, service enabled
+- `blueman-applet` starts automatically via XDG autostart
+
+### Power management (`system/logind-thinkpad.conf`)
+- Lid close → suspend (on battery and on AC)
+- Power key → suspend
+- Idle action → suspend after 30 min
+- Applied to `/etc/systemd/logind.conf.d/thinkpad.conf`
+- **WARNING:** never run `systemctl restart systemd-logind` in an active session — it kills the session. Changes take effect on next reboot.
+- `tuned-ppd` (pre-installed by Fedora) handles power profiles — TLP is NOT used due to conflict
+
 ## What still needs to be done
 
-The user wants this to be a complete, definitive setup. Areas not yet covered:
-
-- [ ] GTK/Qt theme configuration (apps look unstyled inside Sway)
-- [ ] Bluetooth setup (no GUI configured)
-- [ ] Waybar customization (using Fedora defaults)
-- [ ] Rofi theme/styling
-- [ ] Swaylock customization
-- [ ] Dunst styling
-- [ ] `~/.p10k.zsh` — after user runs `p10k configure`, commit the result here
-- [ ] Power management / battery (ThinkPad)
-- [ ] Fonts beyond MesloLGS (system UI fonts)
+The user wants a **complete custom theme** covering everything — this is planned as the last big task:
+- [ ] Custom Waybar config + theme
+- [ ] Custom Rofi theme
+- [ ] Custom Swaylock theme
+- [ ] Custom Dunst theme
+- [ ] GTK theme (replace Adwaita-dark placeholder)
+- [ ] Icon theme
+- [ ] Cursor theme
+- [ ] Swayidle customization
 - [ ] Night light / screen temperature (wlsunset or gammastep)
-- [ ] File manager (Thunar installed, not themed)
-- [ ] Any browser config / extensions
+- [ ] Any browser config
 
 ## How this repo works
 
 - Config files live in `~/dotfiles/` mirroring the target paths
 - `install.sh` creates symlinks with `ln -sf`
+- `system/` contains configs that need sudo to install (logind, etc.)
 - The Sway config system supports per-user overrides in `~/.config/sway/config.d/` — we only add files there, never touching `/etc/sway/`
 - Powerlevel10k is cloned (not a submodule) to keep install simple
 
 ## Important notes
 
 - The nvim repo (`wlcvs/nvim`) was merged into this repo and deleted
-- `lazy-lock.json` is intentionally excluded (regenerates on first launch)
-- When the user runs `p10k configure`, add the resulting `~/.p10k.zsh` to this repo
-- Sway's `$term` variable resolves at parse time, so we override the keybinding directly in `01-terminal.conf` rather than just setting the variable
+- `lazy-lock.json` is excluded via `.config/nvim/.gitignore`
+- Sway's `$term` variable resolves at parse time — use `unbindsym` + `bindsym` to override keybindings from system config without warnings
+- `tuned-ppd` conflicts with TLP — do not install TLP on this system

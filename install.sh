@@ -12,6 +12,7 @@ sudo dnf install -y \
   waybar rofi \
   wl-clipboard \
   dunst \
+  bluez blueman \
   fd-find ripgrep gcc \
   git curl
 
@@ -33,6 +34,14 @@ else
   echo "   already installed, skipping"
 fi
 
+echo "==> Enabling services..."
+sudo systemctl enable --now bluetooth
+
+echo "==> Applying system config (logind — ThinkPad power management)..."
+# NOTE: does NOT restart logind (would kill the session). Takes effect on next boot.
+sudo mkdir -p /etc/systemd/logind.conf.d
+sudo cp "$DOTFILES/system/logind-thinkpad.conf" /etc/systemd/logind.conf.d/thinkpad.conf
+
 echo "==> Linking dotfiles..."
 
 # Sway
@@ -47,15 +56,19 @@ mkdir -p ~/.config/alacritty
 ln -sf "$DOTFILES/.config/alacritty/alacritty.toml" ~/.config/alacritty/
 
 # Neovim
-mkdir -p ~/.config/nvim
 ln -sf "$DOTFILES/.config/nvim" ~/.config/
 
-# tmux e zsh
-ln -sf "$DOTFILES/.tmux.conf" ~/
-ln -sf "$DOTFILES/.zshrc"     ~/
+# GTK dark mode
+mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0
+ln -sf "$DOTFILES/.config/gtk-3.0/settings.ini" ~/.config/gtk-3.0/
+ln -sf "$DOTFILES/.config/gtk-4.0/settings.ini" ~/.config/gtk-4.0/
+
+# tmux, zsh e p10k
+ln -sf "$DOTFILES/.tmux.conf"  ~/
+ln -sf "$DOTFILES/.zshrc"      ~/
+ln -sf "$DOTFILES/.p10k.zsh"   ~/
 
 echo ""
 echo "==> Done! Next steps:"
-echo "    1. Restart Sway"
-echo "    2. Open Alacritty and run: p10k configure"
-echo "    3. Open Neovim — plugins install automatically on first launch"
+echo "    1. Reboot (applies logind power config)"
+echo "    2. Open Neovim — plugins install automatically on first launch"
