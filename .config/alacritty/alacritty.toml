@@ -57,3 +57,14 @@ decorations = "None"
 
 [scrolling]
 history = 10000
+
+# Atalhos de teclado
+[[keyboard.bindings]]
+key = "C"
+mods = "Control|Shift"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "V"
+mods = "Control|Shift"
+action = "Paste"
