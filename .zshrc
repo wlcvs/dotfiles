@@ -13,10 +13,7 @@ setopt hist_ignore_dups hist_ignore_space share_history
 autoload -Uz compinit && compinit
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-compdef ls=eza
-compdef ll=eza
-compdef la=eza
-compdef lt=eza
+compdef _eza ls ll la lt
 
 # PATH
 export PATH="$HOME/.local/bin:$PATH"

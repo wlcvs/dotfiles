@@ -1,7 +1,7 @@
-# Cada Alacritty inicia sua própria sessão tmux independente
+# Reusa sessão "main" se existir (nova janela), senão cria
 [terminal.shell]
 program = "/usr/bin/zsh"
-args = ["-c", "tmux new-session"]
+args = ["-c", "tmux has-session -t main 2>/dev/null && tmux new-window -t main && exec tmux attach-session -t main || exec tmux new-session -s main"]
 
 [font]
 size = 11.0
