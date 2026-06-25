@@ -41,12 +41,14 @@ window#waybar {
     box-shadow: none;
 }
 
-/* Sway mode */
+/* Sway mode (power menu e outros) */
 #mode {
-    color: #a1a1aa;
-    padding: 0 10px;
-    letter-spacing: 0.1em;
+    color: #e4e4e7;
+    background: #111111;
+    padding: 0 14px;
+    letter-spacing: 0.08em;
     font-size: 10px;
+    border-right: 1px solid #27272a;
 }
 
 /* Window title */
@@ -63,8 +65,7 @@ window#waybar {
 #pulseaudio,
 #network,
 #battery,
-#clock,
-#custom-power {
+#clock {
     padding: 0 10px;
     color: #71717a;
     letter-spacing: 0.05em;
@@ -89,15 +90,6 @@ window#waybar {
     border-left: 1px solid #18181b;
 }
 
-#custom-power {
-    color: #52525b;
-    border-left: 1px solid #18181b;
-    padding: 0 12px;
-}
-
-#custom-power:hover {
-    color: #e4e4e7;
-}
 
 tooltip {
     background: #111111;
