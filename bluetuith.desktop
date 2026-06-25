@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Bluetuith
-Comment=TUI Bluetooth Manager
-Exec=alacritty -e bluetuith
-Icon=bluetooth
-Type=Application
-Categories=System;Network;
-Keywords=bluetooth;tui;

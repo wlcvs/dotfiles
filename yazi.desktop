@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Yazi
-Comment=Terminal File Manager
-Exec=alacritty -e yazi
-Icon=system-file-manager
-Type=Application
-Categories=System;FileManager;
-Keywords=files;explorer;tui;

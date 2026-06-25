@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Btop
-Comment=TUI System Monitor
-Exec=alacritty -e btop
-Icon=utilities-system-monitor
-Type=Application
-Categories=System;Monitor;
-Keywords=cpu;memory;process;monitor;tui;

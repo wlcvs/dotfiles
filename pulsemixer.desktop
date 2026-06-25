@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Pulsemixer
-Comment=TUI Audio Mixer
-Exec=alacritty -e pulsemixer
-Icon=audio-volume-high
-Type=Application
-Categories=AudioVideo;Mixer;
-Keywords=audio;volume;mixer;tui;
