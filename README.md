@@ -7,15 +7,19 @@ Personal configuration for **Fedora 44 Sway** on a ThinkPad.
 | Role | Tool |
 |---|---|
 | Compositor | Sway |
-| Terminal | Alacritty |
-| Multiplexer | tmux |
+| Terminal | Alacritty + tmux |
 | Shell | zsh + Powerlevel10k |
 | Editor | Neovim (lazy.nvim) |
 | Launcher | Rofi |
 | Bar | Waybar |
 | Notifications | Dunst |
 | Screenshots | Grimshot (grim + slurp) |
-| Audio | PipeWire |
+| Audio | PipeWire + pulsemixer |
+| File manager | yazi |
+| Bluetooth | bluetuith |
+| Network | nmtui |
+| System monitor | btop |
+| Browser | Google Chrome |
 | Theme | Catppuccin Mocha |
 
 ## Installation
@@ -27,14 +31,24 @@ chmod +x install.sh
 ./install.sh
 ```
 
-After installing, run `p10k configure` to set up the prompt style.
+After installing, run `p10k configure` to set up the prompt style, then open Neovim — plugins install automatically on first launch.
+
+## TUI Apps (available in Rofi via Super+D)
+
+| App | Description |
+|---|---|
+| **yazi** | File manager with image preview |
+| **pulsemixer** | Audio mixer |
+| **bluetuith** | Bluetooth manager |
+| **btop** | System monitor |
+| **nmtui** | Network manager |
 
 ## Keybindings — Sway
 
 | Shortcut | Action |
 |---|---|
 | `Super+Enter` | Open Alacritty (with tmux) |
-| `Super+D` | App launcher (Rofi) |
+| `Super+D` | App launcher (Rofi — apps only) |
 | `Super+Shift+Q` | Close window |
 | `Super+Shift+E` | Exit Sway |
 | `Super+Shift+C` | Reload config |
@@ -53,10 +67,10 @@ After installing, run `p10k configure` to set up the prompt style.
 
 | Shortcut | Action |
 |---|---|
-| `Print` | Full screen → saves to `~/Imagens` |
-| `Alt+Print` | Active window → saves to `~/Imagens` |
-| `Ctrl+Print` | Select area → saves to `~/Imagens` |
-| `Shift+Print` | Select area → copies to clipboard |
+| `Print` | Select area → clipboard |
+| `Alt+Print` | Active window → clipboard |
+| `Ctrl+Print` | Full screen → clipboard |
+| `Shift+Print` | Full screen → saves to `~/Imagens` |
 
 ## Keybindings — tmux
 
