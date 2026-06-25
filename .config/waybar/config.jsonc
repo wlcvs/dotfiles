@@ -12,7 +12,8 @@
         "pulseaudio",
         "network",
         "battery",
-        "clock"
+        "clock",
+        "custom/power"
     ],
 
     "sway/workspaces": {
@@ -89,5 +90,11 @@
         "format": "{:%H:%M  %d/%m}",
         "tooltip-format": "{:%A, %d %B %Y}",
         "tooltip": true
+    },
+
+    "custom/power": {
+        "format": "PWR",
+        "on-click": "wlogout -b 5 -c 0 -r 0 -m 200 -T 0 -B 0 -l ~/.config/wlogout/layout -C ~/.config/wlogout/style.css",
+        "tooltip": false
     }
 }

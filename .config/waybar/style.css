@@ -63,7 +63,8 @@ window#waybar {
 #pulseaudio,
 #network,
 #battery,
-#clock {
+#clock,
+#custom-power {
     padding: 0 10px;
     color: #71717a;
     letter-spacing: 0.05em;
@@ -86,6 +87,16 @@ window#waybar {
 #clock {
     color: #a1a1aa;
     border-left: 1px solid #18181b;
+}
+
+#custom-power {
+    color: #52525b;
+    border-left: 1px solid #18181b;
+    padding: 0 12px;
+}
+
+#custom-power:hover {
+    color: #e4e4e7;
 }
 
 tooltip {
