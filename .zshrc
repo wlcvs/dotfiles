@@ -11,6 +11,7 @@ setopt hist_ignore_dups hist_ignore_space share_history
 
 # Autocompletion
 autoload -Uz compinit && compinit
+setopt complete_aliases
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 compdef _files ls ll la lt
