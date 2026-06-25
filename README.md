@@ -2,6 +2,10 @@
 
 Personal configuration for **Fedora 44 Sway** on a ThinkPad.
 
+## Design
+
+Monochromatic HUD aesthetic — only black, white, and gray. No icons, no emojis, no colors anywhere. JetBrains Mono system-wide. Sharp edges, no rounded corners.
+
 ## Stack
 
 | Role | Tool |
@@ -25,7 +29,6 @@ Personal configuration for **Fedora 44 Sway** on a ThinkPad.
 | Notes | Obsidian (Flatpak) |
 | Music | Spotify (Flatpak) |
 | Containers | Docker |
-| Theme | Catppuccin Mocha |
 
 ## Installation
 
@@ -36,7 +39,7 @@ chmod +x install.sh
 ./install.sh
 ```
 
-After installing, run `p10k configure` to set up the prompt style, then open Neovim — plugins install automatically on first launch.
+After installing, open Neovim — plugins install automatically on first launch.
 
 > **Note:** Docker group membership and logind power config require a reboot to take effect.
 
@@ -56,7 +59,7 @@ After installing, run `p10k configure` to set up the prompt style, then open Neo
 
 | Tool | Replaces | Description |
 |---|---|---|
-| `eza` | `ls` | Modern ls with icons and git status |
+| `eza` | `ls` | Modern ls with git status |
 | `bat` | `cat` / `less` | Syntax highlighting pager |
 | `fzf` | — | Fuzzy finder (`Ctrl+R` history, `Ctrl+T` files) |
 | `zoxide` | `cd` | Smart directory jumper |
@@ -77,8 +80,8 @@ After installing, run `p10k configure` to set up the prompt style, then open Neo
 | `n` | `nvim` |
 | `lg` | `lazygit` |
 | `ldk` | `lazydocker` |
-| `ll` | `eza -lah --icons --git` |
-| `lt` | `eza --tree --icons` |
+| `ll` | `eza -lah --git` |
+| `lt` | `eza --tree` |
 | `cat` | `bat --paging=never` |
 | `du` | `dua` |
 | `fetch` | `fastfetch` |
@@ -88,7 +91,7 @@ After installing, run `p10k configure` to set up the prompt style, then open Neo
 
 | Shortcut | Action |
 |---|---|
-| `Super+Enter` | Open Alacritty (new tmux session) |
+| `Super+Enter` | Open Alacritty (new tmux window) |
 | `Super+D` | App launcher (Rofi — apps only) |
 | `Super+Shift+Q` | Close window |
 | `Super+Shift+E` | Exit Sway |
@@ -102,7 +105,6 @@ After installing, run `p10k configure` to set up the prompt style, then open Neo
 | `Super+B` | Split horizontal |
 | `Super+V` | Split vertical |
 | `Super+R` | Resize mode |
-| `Super+Minus` | Scratchpad |
 
 ## Keybindings — Screenshots
 
@@ -123,7 +125,6 @@ Prefix: `Ctrl+A`
 | `Prefix + -` | Horizontal split |
 | `Prefix + C` | New window |
 | `Alt+Arrow` | Navigate panes |
-| `Prefix + S` | List all sessions |
 | `Prefix + R` | Reload config |
 
 ## Keybindings — Neovim
