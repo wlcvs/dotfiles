@@ -12,20 +12,13 @@ sudo dnf install -y \
   waybar rofi \
   wl-clipboard \
   dunst \
-  bluez blueman \
+  bluez \
   fd-find ripgrep gcc \
+  jetbrains-mono-fonts \
   git curl
 
 echo "==> Setting zsh as default shell..."
 sudo chsh -s /usr/bin/zsh "$USER"
-
-echo "==> Installing MesloLGS NF fonts..."
-mkdir -p ~/.local/share/fonts/MesloLGS
-BASE="https://github.com/romkatv/powerlevel10k-media/raw/master"
-for font in "MesloLGS NF Regular.ttf" "MesloLGS NF Bold.ttf" "MesloLGS NF Italic.ttf" "MesloLGS NF Bold Italic.ttf"; do
-  curl -fsSL "$BASE/${font// /%20}" -o ~/.local/share/fonts/MesloLGS/"$font"
-done
-fc-cache -f ~/.local/share/fonts/
 
 echo "==> Installing Powerlevel10k..."
 if [ ! -d ~/.config/powerlevel10k ]; then
@@ -48,12 +41,31 @@ echo "==> Linking dotfiles..."
 mkdir -p ~/.config/sway/config.d
 ln -sf "$DOTFILES/.config/sway/config.d/00-input.conf"               ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/01-terminal.conf"            ~/.config/sway/config.d/
+ln -sf "$DOTFILES/.config/sway/config.d/10-theme.conf"               ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/60-bindings-screenshot.conf" ~/.config/sway/config.d/
+ln -sf "$DOTFILES/.config/sway/config.d/95-gnome-keyring.conf"       ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/environment"                          ~/.config/sway/
 
 # Alacritty
 mkdir -p ~/.config/alacritty
 ln -sf "$DOTFILES/.config/alacritty/alacritty.toml" ~/.config/alacritty/
+
+# Waybar
+mkdir -p ~/.config/waybar
+ln -sf "$DOTFILES/.config/waybar/config.jsonc" ~/.config/waybar/
+ln -sf "$DOTFILES/.config/waybar/style.css"    ~/.config/waybar/
+
+# Rofi
+mkdir -p ~/.config/rofi
+ln -sf "$DOTFILES/.config/rofi/theme.rasi" ~/.config/rofi/
+
+# Swaylock
+mkdir -p ~/.config/swaylock
+ln -sf "$DOTFILES/.config/swaylock/config" ~/.config/swaylock/
+
+# Dunst
+mkdir -p ~/.config/dunst
+ln -sf "$DOTFILES/.config/dunst/dunstrc" ~/.config/dunst/
 
 # Neovim
 ln -sf "$DOTFILES/.config/nvim" ~/.config/
@@ -103,3 +115,4 @@ echo ""
 echo "==> Done! Next steps:"
 echo "    1. Reboot (applies logind power config)"
 echo "    2. Open Neovim — plugins install automatically on first launch"
+echo "    3. Run: swaymsg reload (applies sway theme without logout)"

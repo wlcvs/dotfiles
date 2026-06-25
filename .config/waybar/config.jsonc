@@ -1,0 +1,54 @@
+{
+    "height": 24,
+    "spacing": 0,
+
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["pulseaudio", "network", "battery", "clock"],
+
+    "sway/workspaces": {
+        "format": "{name}",
+        "disable-scroll": true
+    },
+
+    "sway/mode": {
+        "format": "  {}  "
+    },
+
+    "sway/window": {
+        "max-length": 60
+    },
+
+    "clock": {
+        "format": "{:%H:%M  %d/%m/%Y}",
+        "tooltip": false
+    },
+
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "BAT {capacity}%",
+        "format-charging": "CHR {capacity}%",
+        "format-plugged": "AC {capacity}%",
+        "format-warning": "LOW {capacity}%",
+        "format-critical": "CRIT {capacity}%",
+        "tooltip": false
+    },
+
+    "network": {
+        "format-wifi": "WIFI {signalStrength}%",
+        "format-ethernet": "ETH",
+        "format-disconnected": "NO NET",
+        "format-linked": "NO IP",
+        "tooltip": false
+    },
+
+    "pulseaudio": {
+        "format": "VOL {volume}%",
+        "format-muted": "MUTE",
+        "on-click": "alacritty -e pulsemixer",
+        "tooltip": false
+    }
+}
