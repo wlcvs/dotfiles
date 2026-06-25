@@ -15,14 +15,14 @@ The goal is a definitive setup script — never having to reconfigure from scrat
 
 ### Sway (`~/.config/sway/config.d/`)
 - `00-input.conf` — keyboard layout `br/thinkpad` (ABNT2), caps↔esc swap, touchpad tap + natural scroll
-- `01-terminal.conf` — Alacritty as default terminal (`unbindsym` + rebind to avoid warning), Rofi set to `drun` only (no PATH executables)
+- `01-terminal.conf` — Alacritty as default terminal (`unbindsym` + rebind to avoid warning), Rofi set to `drun` only
 - `60-bindings-screenshot.conf` — Print=area→clipboard, Alt=window, Ctrl=fullscreen, Shift=save to file
 - `95-gnome-keyring.conf` — starts gnome-keyring-daemon with secrets/ssh components
 
 ### Alacritty (`~/.config/alacritty/alacritty.toml`)
 - Font: MesloLGS NF 11pt
 - Theme: Catppuccin Mocha
-- Auto-starts tmux session "main" on open
+- Each Alacritty window starts its own independent tmux session (`tmux new-session`)
 - `Ctrl+Shift+C/V` for copy/paste
 
 ### tmux (`~/.tmux.conf`)
@@ -33,8 +33,12 @@ The goal is a definitive setup script — never having to reconfigure from scrat
 ### zsh (`~/.zshrc`)
 - Powerlevel10k (cloned to `~/.config/powerlevel10k`, config at `~/.p10k.zsh`)
 - Fonts: MesloLGS NF at `~/.local/share/fonts/MesloLGS/`
-- Aliases: `n=nvim`, `vi=nvim`, `vim=nvim`
-- `~/.local/bin` in PATH (yazi, bluetuith, pulsemixer installed there)
+- `~/.local/bin` in PATH (lazygit, lazydocker, gum, dua, yazi, bluetuith installed there)
+- `eza` replaces `ls` (with icons and git status)
+- `bat` replaces `cat` and `less`
+- `zoxide` replaces `cd` (via `z` alias)
+- `fzf` integrated: `Ctrl+R` for history, `Ctrl+T` for files
+- Aliases: `n/vi/vim=nvim`, `lg=lazygit`, `ldk=lazydocker`, `du=dua`, `fetch=fastfetch`, `lt=eza --tree`
 
 ### Neovim (`~/.config/nvim/`)
 - Plugin manager: lazy.nvim
@@ -50,26 +54,51 @@ The goal is a definitive setup script — never having to reconfigure from scrat
 ### Bluetooth
 - `bluez` backend, service enabled and running
 - GUI (blueman) removed — replaced by `bluetuith` (TUI)
-- gnome-keyring started via `95-gnome-keyring.conf` (useful for SSH agent too)
 
 ### Power management (`system/logind-thinkpad.conf`)
 - Lid close → suspend (on battery and on AC)
 - Power key → suspend
 - Idle action → suspend after 30 min
 - Applied to `/etc/systemd/logind.conf.d/thinkpad.conf`
-- `tuned-ppd` (pre-installed by Fedora) handles power profiles — TLP NOT installed (conflict)
+- `tuned-ppd` handles power profiles — TLP NOT installed (conflict)
 
-### TUI apps (desktop files in `applications/`, appear in Rofi)
-- `yazi` — file manager (binary at `~/.local/bin`, installed from GitHub release)
-- `pulsemixer` — audio mixer (installed via pip3)
-- `bluetuith` — bluetooth manager (binary at `~/.local/bin`, installed from GitHub release)
+### Docker
+- Installed from official Docker repo (`docker-ce`, `docker-ce-cli`, `containerd.io`, `docker-buildx-plugin`, `docker-compose-plugin`)
+- Service enabled and running
+- User `wlcsv` added to `docker` group (requires logout to take effect)
+- `lazydocker` as TUI frontend
+
+### TUI apps (desktop files in `applications/`, appear in Rofi via Super+D)
+- `yazi` — file manager with image preview (binary, GitHub release)
+- `pulsemixer` — audio mixer (pip3)
+- `bluetuith` — bluetooth manager (binary, GitHub release)
 - `btop` — system monitor (dnf)
-- `nmtui` — network manager (dnf, part of NetworkManager-tui)
+- `nmtui` — network manager (dnf)
+- `lazygit` — git TUI (binary, GitHub release)
+- `lazydocker` — Docker TUI (binary, GitHub release)
+
+### CLI tools (Omarchy-inspired, installed via dnf or binary)
+- `bat` — cat with syntax highlighting (dnf)
+- `eza` — modern ls with icons (dnf)
+- `fzf` — fuzzy finder with zsh integration (dnf)
+- `zoxide` — smart cd with frecency (dnf)
+- `jq` — JSON processor (dnf)
+- `gum` — pretty shell script components (binary, GitHub release)
+- `fastfetch` — system info (dnf)
+- `tldr` — simplified man pages (dnf)
+- `dua` — disk usage analyzer TUI (binary, GitHub release)
+- `mpv` — media player (dnf)
+- `imagemagick` — image processing CLI (dnf)
+
+### GUI / Flatpak apps
+- `Google Chrome` — browser
+- `Obsidian` — notes (Flatpak: md.obsidian.Obsidian)
+- `Spotify` — music (Flatpak: com.spotify.Client)
 
 ### VS Code
 - `password-store=basic` in `~/.vscode/argv.json` (saved as `.vscode-argv.json` in repo)
 
-## Removed apps (replaced by TUI)
+## Removed apps (replaced by TUI or unused)
 - `blueman` → bluetuith
 - `pavucontrol` → pulsemixer
 - `thunar` / `thunar-archive-plugin` → yazi
@@ -94,15 +123,18 @@ The user wants a **complete custom theme** covering everything — planned as th
 - `install.sh` creates symlinks with `ln -sf`
 - `system/` contains configs that need sudo to install (logind, etc.)
 - `applications/` contains `.desktop` files for TUI apps to appear in Rofi
-- The Sway config system supports per-user overrides in `~/.config/sway/config.d/` — we only add files there, never touching `/etc/sway/`
+- The Sway config system supports per-user overrides in `~/.config/sway/config.d/`
 - Powerlevel10k is cloned (not a submodule) to keep install simple
-- yazi and bluetuith are installed as binaries to `~/.local/bin` (not in Fedora repos)
+- Binaries not in Fedora repos go to `~/.local/bin`: lazygit, lazydocker, yazi, bluetuith, gum, dua
 
 ## Important notes
 
 - The nvim repo (`wlcvs/nvim`) was merged into this repo and deleted
 - `lazy-lock.json` is excluded via `.config/nvim/.gitignore`
-- Sway's `$term` variable resolves at parse time — use `unbindsym` + `bindsym` to override keybindings from system config without warnings
+- Sway's `$term` variable resolves at parse time — use `unbindsym` + `bindsym` to avoid warnings
 - `tuned-ppd` conflicts with TLP — do not install TLP on this system
-- `systemctl restart systemd-logind` kills the active session — never run while logged in; logind changes only take effect on reboot
-- VS Code: `gnome-libsecret` was attempted but `GNOME_KEYRING_CONTROL` isn't exported in Sway session — `basic` store resolved the sync error
+- `systemctl restart systemd-logind` kills the active session — logind changes only on reboot
+- VS Code: `gnome-libsecret` attempted but failed in Sway — `basic` store resolved sync error
+- Docker group membership requires logout/login to take effect
+- Spotify and Obsidian are Flatpak (AUR doesn't exist on Fedora)
+- XDG_DATA_DIRS must include `~/.local/share` for Rofi drun to find custom desktop files

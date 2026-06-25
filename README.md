@@ -19,7 +19,12 @@ Personal configuration for **Fedora 44 Sway** on a ThinkPad.
 | Bluetooth | bluetuith |
 | Network | nmtui |
 | System monitor | btop |
+| Git TUI | lazygit |
+| Docker TUI | lazydocker |
 | Browser | Google Chrome |
+| Notes | Obsidian (Flatpak) |
+| Music | Spotify (Flatpak) |
+| Containers | Docker |
 | Theme | Catppuccin Mocha |
 
 ## Installation
@@ -33,6 +38,8 @@ chmod +x install.sh
 
 After installing, run `p10k configure` to set up the prompt style, then open Neovim — plugins install automatically on first launch.
 
+> **Note:** Docker group membership and logind power config require a reboot to take effect.
+
 ## TUI Apps (available in Rofi via Super+D)
 
 | App | Description |
@@ -42,12 +49,46 @@ After installing, run `p10k configure` to set up the prompt style, then open Neo
 | **bluetuith** | Bluetooth manager |
 | **btop** | System monitor |
 | **nmtui** | Network manager |
+| **lazygit** | Git client |
+| **lazydocker** | Docker manager |
+
+## CLI Tools
+
+| Tool | Replaces | Description |
+|---|---|---|
+| `eza` | `ls` | Modern ls with icons and git status |
+| `bat` | `cat` / `less` | Syntax highlighting pager |
+| `fzf` | — | Fuzzy finder (`Ctrl+R` history, `Ctrl+T` files) |
+| `zoxide` | `cd` | Smart directory jumper |
+| `jq` | — | JSON processor |
+| `gum` | — | Pretty shell script components |
+| `dua` | `du` | Disk usage analyzer (TUI) |
+| `fastfetch` | neofetch | System info |
+| `tldr` | `man` | Simplified man pages |
+| `ripgrep` | `grep` | Fast recursive search |
+| `fd` | `find` | Fast file finder |
+| `mpv` | — | Media player |
+| `imagemagick` | — | Image processing CLI |
+
+## Shell Aliases
+
+| Alias | Command |
+|---|---|
+| `n` | `nvim` |
+| `lg` | `lazygit` |
+| `ldk` | `lazydocker` |
+| `ll` | `eza -lah --icons --git` |
+| `lt` | `eza --tree --icons` |
+| `cat` | `bat --paging=never` |
+| `du` | `dua` |
+| `fetch` | `fastfetch` |
+| `cd` | `zoxide` |
 
 ## Keybindings — Sway
 
 | Shortcut | Action |
 |---|---|
-| `Super+Enter` | Open Alacritty (with tmux) |
+| `Super+Enter` | Open Alacritty (new tmux session) |
 | `Super+D` | App launcher (Rofi — apps only) |
 | `Super+Shift+Q` | Close window |
 | `Super+Shift+E` | Exit Sway |
@@ -82,13 +123,12 @@ Prefix: `Ctrl+A`
 | `Prefix + -` | Horizontal split |
 | `Prefix + C` | New window |
 | `Alt+Arrow` | Navigate panes |
+| `Prefix + S` | List all sessions |
 | `Prefix + R` | Reload config |
 
 ## Keybindings — Neovim
 
 Leader key: `Space`
-
-### General
 
 | Key | Action |
 |---|---|
@@ -96,32 +136,11 @@ Leader key: `Space`
 | `<C-q>` | Quit |
 | `<Leader>e` | Toggle file explorer |
 | `<Leader>fmt` | Format buffer |
-
-### Telescope
-
-| Key | Action |
-|---|---|
-| `<Leader>ff` | Find files |
-| `<Leader>fg` | Live grep |
+| `<Leader>ff` | Find files (Telescope) |
+| `<Leader>fg` | Live grep (Telescope) |
 | `<Leader>fb` | List buffers |
-| `<Leader>fh` | Help tags |
-
-### Harpoon
-
-| Key | Action |
-|---|---|
-| `<Leader>a` | Add file |
-| `<Leader>r` | Remove file |
-| `<C-e>` | Quick menu |
-| `<C-p>` / `<C-n>` | Previous / next file |
-
-### Autocomplete
-
-| Key | Action |
-|---|---|
-| `<C-Space>` | Trigger autocomplete |
-| `<CR>` | Confirm selection |
-| `<Tab>` / `<S-Tab>` | Next / previous item |
+| `<Leader>a` | Harpoon add file |
+| `<C-e>` | Harpoon quick menu |
 
 ## Keyboard
 
