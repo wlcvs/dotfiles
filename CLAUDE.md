@@ -80,8 +80,15 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 - Minimal popup with zinc colors, no icons
 - Used with `-theme ~/.config/rofi/theme.rasi`
 
+### Power menu — wlogout (`~/.config/wlogout/`)
+- `Super+Shift+E` opens wlogout (overrides default swaynag exit dialog), defined in `90-power-menu.conf`
+- 5 buttons in a row: Lock, Logout, Suspend, Reboot, Shutdown — text-only, no icons
+- CSS: zinc palette, JetBrains Mono, no border-radius
+- Keybinds: `l` lock, `e` logout, `u` suspend, `r` reboot, `s` shutdown
+
 ### Swaynag (`~/.config/swaynag/config`)
 - Exit/error dialogs: surface `#111111` bg, zinc border, no yellow — matches monochromatic theme
+- Still used internally by Sway for confirmations other than the exit dialog
 
 ### Swaylock (`~/.config/swaylock/config`)
 - Solid `#0a0a0a` background, gray ring indicator, no icons

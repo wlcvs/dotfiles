@@ -14,6 +14,7 @@ sudo dnf install -y \
   dunst \
   bluez \
   greetd tuigreet \
+  wlogout \
   fd-find ripgrep gcc \
   jetbrains-mono-fonts \
   git curl
@@ -50,6 +51,7 @@ ln -sf "$DOTFILES/.config/sway/config.d/00-input.conf"               ~/.config/s
 ln -sf "$DOTFILES/.config/sway/config.d/01-terminal.conf"            ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/10-theme.conf"               ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/60-bindings-screenshot.conf" ~/.config/sway/config.d/
+ln -sf "$DOTFILES/.config/sway/config.d/90-power-menu.conf"          ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/95-gnome-keyring.conf"       ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/environment"                          ~/.config/sway/
 
@@ -69,6 +71,11 @@ ln -sf "$DOTFILES/.config/rofi/theme.rasi" ~/.config/rofi/
 # Swaynag
 mkdir -p ~/.config/swaynag
 ln -sf "$DOTFILES/.config/swaynag/config" ~/.config/swaynag/
+
+# Wlogout
+mkdir -p ~/.config/wlogout
+ln -sf "$DOTFILES/.config/wlogout/layout" ~/.config/wlogout/
+ln -sf "$DOTFILES/.config/wlogout/style.css" ~/.config/wlogout/
 
 # Swaylock
 mkdir -p ~/.config/swaylock
