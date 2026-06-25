@@ -66,6 +66,10 @@ ln -sf "$DOTFILES/.config/waybar/style.css"    ~/.config/waybar/
 mkdir -p ~/.config/rofi
 ln -sf "$DOTFILES/.config/rofi/theme.rasi" ~/.config/rofi/
 
+# Swaynag
+mkdir -p ~/.config/swaynag
+ln -sf "$DOTFILES/.config/swaynag/config" ~/.config/swaynag/
+
 # Swaylock
 mkdir -p ~/.config/swaylock
 ln -sf "$DOTFILES/.config/swaylock/config" ~/.config/swaylock/

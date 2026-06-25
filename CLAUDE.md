@@ -80,6 +80,9 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 - Minimal popup with zinc colors, no icons
 - Used with `-theme ~/.config/rofi/theme.rasi`
 
+### Swaynag (`~/.config/swaynag/config`)
+- Exit/error dialogs: surface `#111111` bg, zinc border, no yellow — matches monochromatic theme
+
 ### Swaylock (`~/.config/swaylock/config`)
 - Solid `#0a0a0a` background, gray ring indicator, no icons
 
