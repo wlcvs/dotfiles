@@ -13,6 +13,7 @@ sudo dnf install -y \
   wl-clipboard \
   dunst \
   bluez \
+  greetd tuigreet \
   fd-find ripgrep gcc \
   jetbrains-mono-fonts \
   git curl
@@ -29,6 +30,12 @@ fi
 
 echo "==> Enabling services..."
 sudo systemctl enable --now bluetooth
+
+echo "==> Configuring greetd (replaces SDDM)..."
+sudo cp "$DOTFILES/system/greetd-config.toml" /etc/greetd/config.toml
+id greeter &>/dev/null || sudo useradd -M -G video greeter
+sudo systemctl disable sddm 2>/dev/null || true
+sudo systemctl enable greetd
 
 echo "==> Applying system config (logind — ThinkPad power management)..."
 # NOTE: does NOT restart logind (would kill the session). Takes effect on next boot.

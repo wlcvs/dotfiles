@@ -10,6 +10,7 @@ Monochromatic HUD aesthetic — only black, white, and gray. No icons, no emojis
 
 | Role | Tool |
 |---|---|
+| Login manager | greetd + tuigreet |
 | Compositor | Sway |
 | Terminal | Alacritty + tmux |
 | Shell | zsh + Powerlevel10k |

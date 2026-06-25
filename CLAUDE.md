@@ -29,6 +29,12 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 
 ## What's configured
 
+### Login manager (greetd + tuigreet)
+- `system/greetd-config.toml` → `/etc/greetd/config.toml`
+- Terminal login on TTY1, lists Wayland sessions from `/usr/share/wayland-sessions`
+- Requires a dedicated `greeter` user: `useradd -M -G video greeter`
+- `greetd.service` must be enabled; `sddm` disabled
+
 ### Sway (`~/.config/sway/config.d/`)
 - `00-input.conf` — keyboard layout `br/thinkpad` (ABNT2), caps↔esc swap, touchpad tap + natural scroll
 - `01-terminal.conf` — Alacritty as default terminal, Rofi set to `drun` with theme
