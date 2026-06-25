@@ -1,2 +1,4 @@
 TERMINAL=alacritty
 EDITOR=nvim
+XDG_DATA_HOME=/home/wlcsv/.local/share
+XDG_DATA_DIRS=/home/wlcsv/.local/share:/usr/local/share:/usr/share
