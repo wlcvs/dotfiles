@@ -33,3 +33,4 @@ source ~/.config/powerlevel10k/powerlevel10k.zsh-theme
 
 # Configuração do p10k (gerada pelo wizard)
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+export PATH="$HOME/.local/bin:$PATH"
