@@ -11,8 +11,12 @@
 # Neovim — standalone repo (wlcvs/nvim)
 .config/nvim/
 
-# WM-specific scripts — in each WM repo
+# WM-specific — in each WM repo
 .local/bin/
+applications/
+icons/
+.config/Code/
+.vscode-argv.json
 
 # Fedora login manager — in dotfiles-sway
 system/greetd-config.toml
