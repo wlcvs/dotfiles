@@ -43,6 +43,7 @@
         "format-ethernet": "ETH",
         "format-disconnected": "NO NET",
         "format-linked": "NO IP",
+        "on-click": "/home/wlcsv/.local/bin/wifi-popup",
         "tooltip": false
     },
 

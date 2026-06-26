@@ -1,0 +1,328 @@
+#!/usr/bin/env python3
+import gi, os, sys, signal, subprocess
+gi.require_version('Gtk', '3.0')
+gi.require_version('GtkLayerShell', '0.1')
+from gi.repository import Gtk, Gdk, GLib, GtkLayerShell
+
+PIDFILE = '/tmp/wifi-popup.pid'
+
+def toggle_or_exit():
+    if os.path.exists(PIDFILE):
+        try:
+            pid = int(open(PIDFILE).read())
+            os.kill(pid, signal.SIGTERM)
+            os.unlink(PIDFILE)
+            sys.exit(0)
+        except (ProcessLookupError, ValueError, OSError):
+            pass
+    with open(PIDFILE, 'w') as f:
+        f.write(str(os.getpid()))
+
+toggle_or_exit()
+
+CSS = b"""
+window {
+    background-color: #0a0a0a;
+    border: 1px solid #27272a;
+}
+#header {
+    color: #3f3f46;
+    font-family: "JetBrains Mono";
+    font-size: 10px;
+    padding: 6px 10px 4px 10px;
+    border-bottom: 1px solid #1c1c1e;
+}
+row {
+    padding: 0;
+    border-radius: 0;
+    background-color: transparent;
+    outline: none;
+}
+row:selected, row:focus {
+    background-color: #111111;
+    outline: none;
+}
+#net-row {
+    padding: 5px 10px;
+    font-family: "JetBrains Mono";
+    font-size: 10px;
+    color: #a1a1aa;
+}
+#net-row.connected {
+    color: #e4e4e7;
+}
+#net-row.saved {
+    color: #71717a;
+}
+#signal {
+    color: #3f3f46;
+    font-family: "JetBrains Mono";
+    font-size: 10px;
+    margin-left: 6px;
+}
+#signal.strong  { color: #71717a; }
+#signal.medium  { color: #52525b; }
+#signal.weak    { color: #3f3f46; }
+#pwd-box {
+    background-color: #111111;
+    border-top: 1px solid #27272a;
+    padding: 6px 10px;
+}
+entry {
+    background-color: #0a0a0a;
+    color: #e4e4e7;
+    border: 1px solid #27272a;
+    border-radius: 0;
+    font-family: "JetBrains Mono";
+    font-size: 10px;
+    padding: 3px 6px;
+    box-shadow: none;
+}
+entry:focus { border-color: #52525b; }
+#hint {
+    color: #27272a;
+    font-family: "JetBrains Mono";
+    font-size: 9px;
+    padding: 3px 10px 5px 10px;
+}
+"""
+
+def get_networks():
+    try:
+        out = subprocess.check_output(
+            ['nmcli', '-t', '-f', 'ACTIVE,SSID,SIGNAL,SECURITY', 'dev', 'wifi', 'list'],
+            text=True)
+    except Exception:
+        return []
+
+    saved = set()
+    try:
+        s = subprocess.check_output(['nmcli', '-t', '-f', 'NAME', 'con', 'show'], text=True)
+        saved = {l.strip() for l in s.splitlines() if l.strip()}
+    except Exception:
+        pass
+
+    seen = set()
+    nets = []
+    for line in out.splitlines():
+        parts = line.split(':', 3)
+        if len(parts) < 4:
+            continue
+        active, ssid, signal, security = parts
+        ssid = ssid.strip()
+        if not ssid or ssid in seen:
+            continue
+        seen.add(ssid)
+        nets.append({
+            'ssid':      ssid,
+            'signal':    int(signal) if signal.isdigit() else 0,
+            'secured':   bool(security.strip()),
+            'saved':     ssid in saved,
+            'connected': active.strip() in ('sim', 'yes'),
+        })
+
+    nets.sort(key=lambda n: (not n['connected'], not n['saved'], -n['signal']))
+    return nets
+
+def connect(ssid, password=None):
+    if password:
+        subprocess.Popen(['nmcli', 'dev', 'wifi', 'connect', ssid, 'password', password])
+    else:
+        subprocess.Popen(['nmcli', 'con', 'up', ssid])
+
+class WifiPopup(Gtk.Window):
+    def __init__(self):
+        super().__init__()
+
+        GtkLayerShell.init_for_window(self)
+        GtkLayerShell.set_layer(self, GtkLayerShell.Layer.TOP)
+        GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
+        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
+        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 4)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 4)
+
+        css = Gtk.CssProvider()
+        css.load_from_data(CSS)
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(), css,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
+        self._networks = get_networks()
+        self._pwd_visible = False
+
+        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+
+        # Header
+        header = Gtk.Label(label='Wi-Fi')
+        header.set_name('header')
+        header.set_halign(Gtk.Align.START)
+        outer.pack_start(header, False, False, 0)
+
+        # Network list
+        scroll = Gtk.ScrolledWindow()
+        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scroll.set_min_content_height(min(len(self._networks) * 28, 200))
+        scroll.set_max_content_height(200)
+
+        self.listbox = Gtk.ListBox()
+        self.listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
+        self.listbox.set_activate_on_single_click(False)
+        self.listbox.connect('row-activated', self._on_activate)
+
+        for net in self._networks:
+            self.listbox.add(self._make_row(net))
+
+        scroll.add(self.listbox)
+        outer.pack_start(scroll, False, False, 0)
+
+        # Password area (hidden initially)
+        self.pwd_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.pwd_box.set_name('pwd-box')
+        self.pwd_box.set_no_show_all(True)
+
+        self.pwd_entry = Gtk.Entry()
+        self.pwd_entry.set_visibility(False)
+        self.pwd_entry.set_placeholder_text('password')
+        self.pwd_entry.connect('activate', self._on_pwd_enter)
+        self.pwd_entry.connect('key-press-event', self._on_pwd_key)
+        self.pwd_box.pack_start(self.pwd_entry, False, False, 0)
+        outer.pack_start(self.pwd_box, False, False, 0)
+
+        # Hint
+        hint = Gtk.Label(label='j/k  Enter  r=rescan  Esc')
+        hint.set_name('hint')
+        hint.set_halign(Gtk.Align.START)
+        outer.pack_start(hint, False, False, 0)
+
+        self.add(outer)
+        self.connect('key-press-event', self._on_key)
+        self.connect('destroy', self._cleanup)
+
+        # Select first row
+        if self._networks:
+            first = self.listbox.get_row_at_index(0)
+            if first:
+                self.listbox.select_row(first)
+
+    def _make_row(self, net):
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        box.set_name('net-row')
+
+        label = Gtk.Label(label=net['ssid'])
+        label.set_halign(Gtk.Align.START)
+        label.set_hexpand(True)
+        label.set_ellipsize(3)  # PANGO_ELLIPSIZE_END
+
+        ctx = box.get_style_context()
+        if net['connected']:
+            ctx.add_class('connected')
+        elif net['saved']:
+            ctx.add_class('saved')
+
+        sig = Gtk.Label()
+        sig.set_name('signal')
+        sig.set_text(f"{net['signal']}%")
+        sig_ctx = sig.get_style_context()
+        if net['signal'] >= 70:
+            sig_ctx.add_class('strong')
+        elif net['signal'] >= 40:
+            sig_ctx.add_class('medium')
+        else:
+            sig_ctx.add_class('weak')
+
+        lock = Gtk.Label(label=' *' if net['secured'] else '  ')
+        lock.get_style_context().add_class('signal')
+
+        box.pack_start(label, True, True, 0)
+        box.pack_start(sig, False, False, 0)
+        box.pack_start(lock, False, False, 0)
+
+        row = Gtk.ListBoxRow()
+        row.add(box)
+        row._net = net
+        return row
+
+    def _on_activate(self, listbox, row):
+        net = row._net
+        if net['connected']:
+            self._quit()
+            return
+        if net['secured'] and not net['saved']:
+            self._show_pwd(net)
+        else:
+            connect(net['ssid'])
+            self._quit()
+
+    def _show_pwd(self, net):
+        self._pending_net = net
+        self.pwd_box.show()
+        self.pwd_entry.set_text('')
+        self.pwd_entry.grab_focus()
+
+    def _on_pwd_enter(self, entry):
+        pwd = entry.get_text()
+        if pwd:
+            connect(self._pending_net['ssid'], pwd)
+            self._quit()
+
+    def _on_pwd_key(self, _w, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.pwd_box.hide()
+            self.listbox.grab_focus()
+        return False
+
+    def _rescan(self):
+        subprocess.Popen(['nmcli', 'dev', 'wifi', 'rescan'])
+        GLib.timeout_add(2000, self._reload)
+
+    def _reload(self):
+        self._networks = get_networks()
+        for child in self.listbox.get_children():
+            self.listbox.remove(child)
+        for net in self._networks:
+            self.listbox.add(self._make_row(net))
+        self.listbox.show_all()
+        if self._networks:
+            self.listbox.select_row(self.listbox.get_row_at_index(0))
+        return False
+
+    def _on_key(self, _w, event):
+        k = event.keyval
+        if k == Gdk.KEY_Escape:
+            self._quit()
+        elif k in (ord('j'), Gdk.KEY_Down):
+            row = self.listbox.get_selected_row()
+            if row:
+                nxt = self.listbox.get_row_at_index(row.get_index() + 1)
+                if nxt:
+                    self.listbox.select_row(nxt)
+        elif k in (ord('k'), Gdk.KEY_Up):
+            row = self.listbox.get_selected_row()
+            if row:
+                prv = self.listbox.get_row_at_index(row.get_index() - 1)
+                if prv:
+                    self.listbox.select_row(prv)
+        elif k in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
+            row = self.listbox.get_selected_row()
+            if row:
+                self._on_activate(self.listbox, row)
+        elif k == ord('r'):
+            self._rescan()
+        elif k == ord('q'):
+            self._quit()
+        return True
+
+    def _cleanup(self, *_):
+        try:
+            os.unlink(PIDFILE)
+        except OSError:
+            pass
+
+    def _quit(self):
+        self._cleanup()
+        Gtk.main_quit()
+
+win = WifiPopup()
+win.show_all()
+Gtk.main()
