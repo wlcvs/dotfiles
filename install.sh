@@ -18,7 +18,8 @@ sudo dnf install -y \
   jetbrains-mono-fonts \
   git curl \
   brightnessctl playerctl wlsunset \
-  cliphist fzf
+  cliphist fzf \
+  gnome-themes-extra
 
 echo "==> Setting zsh as default shell..."
 sudo chsh -s /usr/bin/zsh "$USER"
@@ -99,6 +100,8 @@ ln -sf "$DOTFILES/.config/nvim" ~/.config/
 mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0
 ln -sf "$DOTFILES/.config/gtk-3.0/settings.ini" ~/.config/gtk-3.0/
 ln -sf "$DOTFILES/.config/gtk-4.0/settings.ini" ~/.config/gtk-4.0/
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 # tmux, zsh e p10k
 ln -sf "$DOTFILES/.tmux.conf"  ~/
