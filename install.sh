@@ -14,8 +14,6 @@ sudo dnf install -y \
   dunst \
   bluez \
   greetd tuigreet \
-  wlogout \
-  breeze-cursor-theme \
   fd-find ripgrep gcc \
   jetbrains-mono-fonts \
   git curl
@@ -44,6 +42,13 @@ echo "==> Applying system config (logind — ThinkPad power management)..."
 sudo mkdir -p /etc/systemd/logind.conf.d
 sudo cp "$DOTFILES/system/logind-thinkpad.conf" /etc/systemd/logind.conf.d/thinkpad.conf
 
+echo "==> Installing DMZ-White cursor theme..."
+curl -fsSL "http://ftp.debian.org/debian/pool/main/d/dmz-cursor-theme/dmz-cursor-theme_0.4.5_all.deb" -o /tmp/dmz.deb
+cd /tmp && ar x dmz.deb && tar -xf data.tar.xz
+mkdir -p ~/.local/share/icons
+cp -r /tmp/usr/share/icons/DMZ-White ~/.local/share/icons/
+cd "$DOTFILES"
+
 echo "==> Linking dotfiles..."
 
 # Sway
@@ -53,6 +58,7 @@ ln -sf "$DOTFILES/.config/sway/config.d/01-terminal.conf"            ~/.config/s
 ln -sf "$DOTFILES/.config/sway/config.d/10-theme.conf"               ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/60-bindings-screenshot.conf" ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/90-power-menu.conf"          ~/.config/sway/config.d/
+ln -sf "$DOTFILES/.config/sway/config.d/90-swayidle.conf"            ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/95-gnome-keyring.conf"       ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/environment"                          ~/.config/sway/
 
@@ -72,11 +78,6 @@ ln -sf "$DOTFILES/.config/rofi/theme.rasi" ~/.config/rofi/
 # Swaynag
 mkdir -p ~/.config/swaynag
 ln -sf "$DOTFILES/.config/swaynag/config" ~/.config/swaynag/
-
-# Wlogout
-mkdir -p ~/.config/wlogout
-ln -sf "$DOTFILES/.config/wlogout/layout" ~/.config/wlogout/
-ln -sf "$DOTFILES/.config/wlogout/style.css" ~/.config/wlogout/
 
 # Swaylock
 mkdir -p ~/.config/swaylock
@@ -111,14 +112,6 @@ update-desktop-database ~/.local/share/applications/
 # VS Code argv.json
 mkdir -p ~/.vscode
 cp "$DOTFILES/.vscode-argv.json" ~/.vscode/argv.json
-
-echo ""
-echo "==> Installing Bibata-Modern-Ice cursor theme..."
-BIBATA_URL=$(curl -fsSL https://api.github.com/repos/ful1e5/Bibata_Cursor/releases/latest | python3 -c "import json,sys; r=json.load(sys.stdin); [print(a['browser_download_url']) for a in r['assets'] if 'Bibata-Modern-Ice.tar.xz' == a['name']]")
-curl -fsSL "$BIBATA_URL" -o /tmp/bibata-ice.tar.xz
-tar -xf /tmp/bibata-ice.tar.xz -C /tmp/
-mkdir -p ~/.local/share/icons
-cp -r /tmp/Bibata-Modern-Ice ~/.local/share/icons/
 
 echo ""
 echo "==> Installing TUI apps not in dnf..."
