@@ -36,14 +36,17 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 - `greetd.service` must be enabled; `sddm` disabled
 
 ### Sway (`~/.config/sway/config.d/`)
-- `00-input.conf` — keyboard layout `br/thinkpad` (ABNT2), caps↔esc swap, touchpad tap + natural scroll
+- `00-input.conf` — keyboard layout `br/thinkpad` (ABNT2), caps↔esc swap, touchpad tap + natural scroll, `DMZ-White` cursor via `seat *`
 - `01-terminal.conf` — Alacritty as default terminal, Rofi set to `drun` with theme
 - `10-theme.conf` — wallpaper `#3f3f3f` solid, border colors (monochromatic), 1px border, 6px inner gaps
 - `60-bindings-screenshot.conf` — Print=area→clipboard, Alt=window, Ctrl=fullscreen, Shift=save
+- `90-power-menu.conf` — overrides `Super+Shift+E` with a named sway mode; options shown in Waybar `sway/mode`
+- `90-swayidle.conf` — overrides Fedora default; dim→lock→display off→suspend sequence
 - `95-gnome-keyring.conf` — starts gnome-keyring-daemon with secrets/ssh components
 
 ### Sway environment (`~/.config/sway/environment`)
 - `NO_COLOR=1` — suppresses ANSI colors in CLIs that respect the standard
+- `XCURSOR_THEME=DMZ-White` / `XCURSOR_SIZE=24` — cursor for XWayland and Wayland apps
 - `XDG_DATA_DIRS` includes `~/.local/share` so Rofi finds custom desktop files
 
 ### Alacritty (`~/.config/alacritty/alacritty.toml`)
@@ -71,6 +74,7 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 ### Waybar (`~/.config/waybar/`)
 - No icons — text labels only
 - Right modules: `CPU %  MEM G  TEMP C | BRT %  VOL %  WIFI % | BAT % | HH:MM  DD/MM`
+- Left: workspaces + `sway/mode` (shows power menu text when `Super+Shift+E` is pressed)
 - Separators via `border-left` between groups
 - Scroll on VOL and BRT adjusts volume/brightness
 - Temperature: `thermal-zone 6` (x86_pkg_temp, the actual CPU package sensor)
@@ -80,26 +84,38 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 - Minimal popup with zinc colors, no icons
 - Used with `-theme ~/.config/rofi/theme.rasi`
 
-### Power menu — wlogout (`~/.config/wlogout/`)
-- `Super+Shift+E` opens wlogout (overrides default swaynag exit dialog), defined in `90-power-menu.conf`
-- 5 buttons in a row: Lock, Logout, Suspend, Reboot, Shutdown — text-only, no icons
-- CSS: zinc palette, JetBrains Mono, no border-radius
-- Keybinds: `l` lock, `e` logout, `u` suspend, `r` reboot, `s` shutdown
+### Power menu (`90-power-menu.conf`)
+- `Super+Shift+E` enters a named sway mode; the mode text appears in `sway/mode` on the Waybar left
+- Options: `(l) lock  (e) logout  (u) suspend  (r) reboot  (s) shutdown  (Esc) cancel`
+- No external tool — pure sway mode, zero dependencies
 
 ### Swaynag (`~/.config/swaynag/config`)
-- Exit/error dialogs: surface `#111111` bg, zinc border, no yellow — matches monochromatic theme
-- Still used internally by Sway for confirmations other than the exit dialog
+- Exit/error dialogs: surface `#111111` bg, zinc border, no yellow
+- Still triggered by Sway internally for some confirmations
 
 ### Swaylock (`~/.config/swaylock/config`)
 - Solid `#0a0a0a` background, gray ring indicator, no icons
+
+### Swayidle (`90-swayidle.conf`)
+- Overrides Fedora's `/usr/share/sway/config.d/90-swayidle.conf`
+- 4m30s idle → dim to 10% brightness (warning)
+- 5min → restore brightness + lock (swaylock)
+- 10min → display off (`output * power off`)
+- 20min → suspend **only if on battery** (`/sys/class/power_supply/AC/online == 0`)
 
 ### Dunst (`~/.config/dunst/dunstrc`)
 - No icons (`icon_position = off`), monochromatic urgency levels
 - New syntax: `height = (0, 100)`, `offset = (12, 12)` (dunst 1.12+)
 - Top-right, 6px gap, no rounded corners
 
+### Cursor
+- Theme: `DMZ-White` — classic clean white arrow with black outline (sourced from Debian `dmz-cursor-theme` package)
+- Installed to `~/.local/share/icons/DMZ-White`
+- Configured in: sway `seat *`, `sway/environment`, GTK3/4 settings, gsettings
+
 ### GTK
 - Dark mode: `gtk-application-prefer-dark-theme=1`
+- Cursor: `DMZ-White`
 
 ### VS Code
 - Theme: GitHub Dark Dimmed + full zinc palette override via `workbench.colorCustomizations`
@@ -113,7 +129,8 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 - `bluetuith` (TUI) as frontend
 
 ### Power management (`system/logind-thinkpad.conf`)
-- Lid close → suspend, Power key → suspend, Idle → suspend after 30min
+- Lid close → suspend (AC and battery), Power key → suspend
+- `IdleAction=ignore` — idle suspend handled by swayidle (battery-only, 20min)
 - `tuned-ppd` handles power profiles — **TLP NOT installed (conflict)**
 
 ### Docker
@@ -134,10 +151,11 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 
 - Config files live in `~/dotfiles/` mirroring target paths
 - `install.sh` creates symlinks with `ln -sf`
-- `system/` — configs that need sudo (logind)
+- `system/` — configs that need sudo (logind, greetd)
 - `applications/` — `.desktop` files for TUI apps
 - Sway config system: user overrides in `~/.config/sway/config.d/`
 - Binaries not in Fedora repos go to `~/.local/bin`
+- Cursor theme installed to `~/.local/share/icons/`
 
 ## Important notes
 
@@ -151,3 +169,5 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 - `lazy-lock.json` excluded via `.config/nvim/.gitignore`
 - After theme changes: `swaymsg reload` applies sway+waybar; `pkill dunst && dunst &` for dunst
 - Do NOT manually start waybar — Sway starts it automatically on reload
+- Cursor needs to be set in 3 places to cover all apps: sway seat, environment file, gsettings
+- `greetd` requires `greeter` user — if missing, service fails silently in a loop

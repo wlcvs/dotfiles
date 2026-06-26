@@ -12,6 +12,7 @@ Monochromatic HUD aesthetic — only black, white, and gray. No icons, no emojis
 |---|---|
 | Login manager | greetd + tuigreet |
 | Compositor | Sway |
+| Screen lock | swaylock + swayidle |
 | Terminal | Alacritty + tmux |
 | Shell | zsh + Powerlevel10k |
 | Editor | Neovim (lazy.nvim) |
@@ -95,7 +96,7 @@ After installing, open Neovim — plugins install automatically on first launch.
 | `Super+Enter` | Open Alacritty (new tmux window) |
 | `Super+D` | App launcher (Rofi — apps only) |
 | `Super+Shift+Q` | Close window |
-| `Super+Shift+E` | Exit Sway |
+| `Super+Shift+E` | Power menu (lock / logout / suspend / reboot / shutdown) |
 | `Super+Shift+C` | Reload config |
 | `Super+F` | Fullscreen |
 | `Super+Shift+Space` | Toggle floating |
