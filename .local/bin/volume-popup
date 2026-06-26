@@ -148,7 +148,12 @@ class VolumePopup(Gtk.Window):
         if not line:
             return False
         try:
-            if json.loads(line).get('change') in ('focus', 'new'):
+            ev = json.loads(line)
+            change = ev.get('change', '')
+            # workspace switch: has 'current' field
+            # new window opened: has 'container' field and change=='new'
+            if ('current' in ev and change == 'focus') or \
+               ('container' in ev and change == 'new'):
                 self._quit()
                 return False
         except Exception:
