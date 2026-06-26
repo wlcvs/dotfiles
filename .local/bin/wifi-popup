@@ -177,13 +177,10 @@ class WifiPopup(Gtk.Window):
 
         sig  = Gtk.Label(label=f"{net['signal']}%")
         sig.set_name('signal')
-        lock = Gtk.Label(label=' *' if net['secured'] else '')
-        lock.set_name('signal')
 
         box.pack_start(lbl,   True,  True,  0)
         box.pack_start(entry, True,  True,  0)
         box.pack_start(sig,   False, False, 0)
-        box.pack_start(lock,  False, False, 0)
 
         row = Gtk.ListBoxRow()
         row.add(box)

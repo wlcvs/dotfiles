@@ -70,3 +70,11 @@
     foreground = "#e4e4e7"
     frame_color = "#71717a"
     timeout = 0
+
+[network_manager]
+    appname = "NetworkManager"
+    skip_display = true
+
+[nm_applet]
+    appname = "nm-applet"
+    skip_display = true
