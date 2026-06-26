@@ -40,8 +40,8 @@ row {
     outline: none;
 }
 row:selected { background-color: #111111; outline: none; }
-row:selected #net-row { color: #e4e4e7; }
-row:selected #net-row.connected { color: #ffffff; }
+row:selected #net-row { color: #a1a1aa; }
+row:selected #net-row.connected { color: #a1a1aa; }
 #net-row {
     padding: 5px 10px;
     font-family: "JetBrains Mono";
