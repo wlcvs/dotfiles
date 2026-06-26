@@ -140,7 +140,7 @@ class WifiPopup(Gtk.Window):
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 4)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 180)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 260)
 
         css = Gtk.CssProvider()
         css.load_from_data(CSS)
@@ -162,7 +162,7 @@ class WifiPopup(Gtk.Window):
 
         self.listbox = Gtk.ListBox()
         self.listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
-        self.listbox.set_activate_on_single_click(False)
+        self.listbox.set_activate_on_single_click(True)
         self.listbox.connect('row-activated', self._on_activate)
 
         for net in self._networks:
