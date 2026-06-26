@@ -34,18 +34,17 @@ window {
     border: 1px solid #27272a;
 }
 #wrap {
-    padding: 8px 0;
+    padding: 6px 5px 6px 5px;
 }
 scale {
     outline: none;
-    min-width: 20px;
+    min-width: 16px;
 }
 scale trough {
     background-color: #1c1c1e;
-    border-radius: 0;
     min-width: 4px;
-    min-height: 90px;
-    margin: 0 8px;
+    border-radius: 0;
+    margin: 0 6px;
 }
 scale highlight {
     background-color: #52525b;
@@ -54,11 +53,11 @@ scale highlight {
 scale slider {
     background-color: #e4e4e7;
     border-radius: 0;
-    min-width: 20px;
-    min-height: 6px;
+    min-width: 16px;
+    min-height: 4px;
     border: none;
     box-shadow: none;
-    margin: 0 -8px;
+    margin: 0;
 }
 scale slider:hover {
     background-color: #ffffff;
@@ -67,7 +66,7 @@ scale slider:hover {
     color: #71717a;
     font-family: "JetBrains Mono";
     font-size: 10px;
-    margin-top: 6px;
+    margin-top: 4px;
 }
 #label.muted {
     color: #3f3f46;
@@ -118,23 +117,16 @@ class VolumePopup(Gtk.Window):
         self.scale = Gtk.Scale.new_with_range(Gtk.Orientation.VERTICAL, 0, 100, 1)
         self.scale.set_inverted(True)
         self.scale.set_draw_value(False)
-        self.scale.set_size_request(20, 80)
-        self.scale.set_halign(Gtk.Align.CENTER)
+        self.scale.set_size_request(28, 100)
         self.scale.set_value(self.vol)
         self.scale.connect('value-changed', self._on_scale)
 
         self.lbl = Gtk.Label()
         self.lbl.set_name('label')
-        self.lbl.set_halign(Gtk.Align.CENTER)
         self._refresh_label()
 
-        # Single centered column — scale and label share the same center
-        col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        col.set_halign(Gtk.Align.CENTER)
-        col.pack_start(self.scale, True, True, 0)
-        col.pack_start(self.lbl, False, False, 0)
-
-        wrap.pack_start(col, True, True, 0)
+        wrap.pack_start(self.scale, True, True, 0)
+        wrap.pack_start(self.lbl, False, False, 0)
         self.add(wrap)
 
         self.connect('key-press-event', self._on_key)
