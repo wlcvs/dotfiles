@@ -162,7 +162,7 @@ class VolumePopup(Gtk.Window):
 
     def _on_key(self, _w, event):
         k = event.keyval
-        if k == Gdk.KEY_Escape:
+        if k in (Gdk.KEY_Escape, ord('q')):
             self._quit()
         elif k in (Gdk.KEY_Up, ord('k')):
             self._set_vol(self.vol + 5)
