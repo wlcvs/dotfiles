@@ -12,11 +12,7 @@
 .config/nvim/
 
 # WM-specific scripts — in each WM repo
-.local/bin/clipboard
-.local/bin/sway-alt-tab
-.local/bin/first-empty-workspace
-.local/bin/volume-popup
-.local/bin/wifi-popup
+.local/bin/
 
 # Fedora login manager — in dotfiles-sway
 system/greetd-config.toml

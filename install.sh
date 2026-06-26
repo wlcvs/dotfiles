@@ -44,14 +44,6 @@ mkdir -p ~/.local/share/applications
 cp "$DOTFILES/applications/"*.desktop ~/.local/share/applications/
 cp "$DOTFILES/applications/hidden/"*.desktop ~/.local/share/applications/
 
-echo "==> Linking scripts..."
-mkdir -p ~/.local/bin
-ln -sf "$DOTFILES/.local/bin/volume-tui"    ~/.local/bin/volume-tui
-ln -sf "$DOTFILES/.local/bin/power-profile" ~/.local/bin/power-profile
-chmod +x \
-  "$DOTFILES/.local/bin/volume-tui" \
-  "$DOTFILES/.local/bin/power-profile"
-
 echo "==> Installing yazi..."
 curl -fsSL https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-musl.zip \
   -o /tmp/yazi.zip
