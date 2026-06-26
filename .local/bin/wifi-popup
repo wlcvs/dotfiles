@@ -39,16 +39,15 @@ row {
     background-color: transparent;
     outline: none;
 }
+row { background-color: transparent; }
 row:selected { background-color: #111111; outline: none; }
-row:selected #net-row { color: #a1a1aa; }
-row:selected #net-row.connected { color: #a1a1aa; }
 #net-row {
     padding: 5px 10px;
     font-family: "JetBrains Mono";
     font-size: 11px;
-    color: #3f3f46;
+    color: #27272a;
 }
-#net-row.connected { color: #71717a; }
+#net-row.selected-row { color: #a1a1aa; }
 #signal {
     font-family: "JetBrains Mono";
     font-size: 10px;
@@ -143,6 +142,7 @@ class WifiPopup(Gtk.Window):
         self.listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
         self.listbox.set_activate_on_single_click(True)
         self.listbox.connect('row-activated', self._on_activate)
+        self.listbox.connect('selected-rows-changed', self._on_selection_changed)
 
         for net in self._networks:
             self.listbox.add(self._make_row(net))
@@ -275,6 +275,16 @@ class WifiPopup(Gtk.Window):
         if self._networks:
             self.listbox.select_row(self.listbox.get_row_at_index(0))
         return False
+
+    def _on_selection_changed(self, lb):
+        selected = lb.get_selected_row()
+        for row in lb.get_children():
+            box = row.get_child()
+            ctx = box.get_style_context()
+            if row is selected:
+                ctx.add_class('selected-row')
+            else:
+                ctx.remove_class('selected-row')
 
     def _arm_focus_out(self):
         self.connect('focus-out-event', lambda *_: GLib.timeout_add(100, self._quit))
