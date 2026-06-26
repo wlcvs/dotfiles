@@ -1,0 +1,6 @@
+configuration {
+    terminal:       "alacritty";
+    click-to-exit:  true;
+}
+
+@theme "~/.config/rofi/theme.rasi"

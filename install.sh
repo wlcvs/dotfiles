@@ -77,7 +77,8 @@ ln -sf "$DOTFILES/.config/waybar/style.css"    ~/.config/waybar/
 
 # Rofi
 mkdir -p ~/.config/rofi
-ln -sf "$DOTFILES/.config/rofi/theme.rasi" ~/.config/rofi/
+ln -sf "$DOTFILES/.config/rofi/config.rasi" ~/.config/rofi/
+ln -sf "$DOTFILES/.config/rofi/theme.rasi"  ~/.config/rofi/
 
 # Swaynag
 mkdir -p ~/.config/swaynag

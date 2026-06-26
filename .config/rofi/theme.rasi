@@ -73,7 +73,3 @@ element normal.active  { text-color: @text; }
 element normal.urgent  { text-color: @text; }
 element selected.normal { text-color: @text; }
 element selected.active { text-color: @text; }
-
-configuration {
-    click-to-exit: true;
-}
