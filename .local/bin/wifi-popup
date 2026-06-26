@@ -47,13 +47,14 @@ row:selected { background-color: #111111; outline: none; }
     font-size: 11px;
     color: #27272a;
 }
-#net-row.selected-row { color: #a1a1aa; }
+#net-row.selected-row { color: #e4e4e7; }
 #signal {
     font-family: "JetBrains Mono";
     font-size: 10px;
-    color: #3f3f46;
+    color: #27272a;
     margin-left: 8px;
 }
+#signal.selected-sig { color: #52525b; }
 entry {
     background-color: transparent;
     color: #e4e4e7;
@@ -191,6 +192,7 @@ class WifiPopup(Gtk.Window):
         row._net   = net
         row._lbl   = lbl
         row._entry = entry
+        row._sig   = sig
         return row
 
     def _on_activate(self, _lb, row):
@@ -279,12 +281,10 @@ class WifiPopup(Gtk.Window):
     def _on_selection_changed(self, lb):
         selected = lb.get_selected_row()
         for row in lb.get_children():
-            box = row.get_child()
-            ctx = box.get_style_context()
-            if row is selected:
-                ctx.add_class('selected-row')
-            else:
-                ctx.remove_class('selected-row')
+            box  = row.get_child()
+            is_sel = row is selected
+            box.get_style_context().add_class('selected-row') if is_sel else box.get_style_context().remove_class('selected-row')
+            row._sig.get_style_context().add_class('selected-sig') if is_sel else row._sig.get_style_context().remove_class('selected-sig')
 
     def _arm_focus_out(self):
         self.connect('focus-out-event', lambda *_: GLib.timeout_add(100, self._quit))
