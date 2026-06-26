@@ -134,7 +134,7 @@ class WifiPopup(Gtk.Window):
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 4)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 260)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 150)
 
         css = Gtk.CssProvider()
         css.load_from_data(CSS)
@@ -171,16 +171,11 @@ class WifiPopup(Gtk.Window):
         self.pwd_view = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.pwd_view.set_name('pwd-view')
 
-        self.pwd_ssid_lbl = Gtk.Label()
-        self.pwd_ssid_lbl.set_name('pwd-ssid')
-        self.pwd_ssid_lbl.set_halign(Gtk.Align.START)
-
         self.pwd_entry = Gtk.Entry()
         self.pwd_entry.set_visibility(False)
         self.pwd_entry.set_placeholder_text('password')
         self.pwd_entry.connect('activate', self._on_pwd_enter)
 
-        self.pwd_view.pack_start(self.pwd_ssid_lbl, False, False, 0)
         self.pwd_view.pack_start(self.pwd_entry, False, False, 0)
         self.stack.add_named(self.pwd_view, 'password')
 
@@ -227,7 +222,6 @@ class WifiPopup(Gtk.Window):
             return
         if net['secured'] and not net['saved']:
             self._pending = net['ssid']
-            self.pwd_ssid_lbl.set_text(net['ssid'])
             self.pwd_entry.set_text('')
             self.stack.set_visible_child_name('password')
             self.pwd_entry.grab_focus()
