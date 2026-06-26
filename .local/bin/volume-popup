@@ -1,10 +1,9 @@
 #!/bin/sh
-pkill -f "alacritty.*volume-tui" && exit 0
+swaymsg '[app_id="volume-popup"] kill' 2>/dev/null && exit 0
 exec alacritty \
     --class volume-popup \
     -o "window.dimensions.columns=14" \
     -o "window.dimensions.lines=22" \
-    -o "window.decorations='None'" \
     -o "window.padding.x=6" \
     -o "window.padding.y=6" \
     -e /home/wlcsv/.local/bin/volume-tui
