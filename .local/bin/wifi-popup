@@ -140,7 +140,7 @@ class WifiPopup(Gtk.Window):
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 4)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 4)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 180)
 
         css = Gtk.CssProvider()
         css.load_from_data(CSS)
@@ -188,12 +188,6 @@ class WifiPopup(Gtk.Window):
         self.pwd_entry.connect('key-press-event', self._on_pwd_key)
         self.pwd_box.pack_start(self.pwd_entry, False, False, 0)
         outer.pack_start(self.pwd_box, False, False, 0)
-
-        # Hint
-        hint = Gtk.Label(label='j/k  Enter  r=rescan  Esc')
-        hint.set_name('hint')
-        hint.set_halign(Gtk.Align.START)
-        outer.pack_start(hint, False, False, 0)
 
         self.add(outer)
         self.connect('key-press-event', self._on_key)
