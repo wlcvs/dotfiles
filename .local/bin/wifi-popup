@@ -40,21 +40,19 @@ row {
     outline: none;
 }
 row { background-color: transparent; }
-row:selected { background-color: #111111; outline: none; }
+row:selected { background-color: #27272a; outline: none; }
 #net-row {
     padding: 5px 10px;
     font-family: "JetBrains Mono";
     font-size: 11px;
-    color: #27272a;
+    color: #e4e4e7;
 }
-#net-row.selected-row { color: #e4e4e7; }
 #signal {
     font-family: "JetBrains Mono";
     font-size: 10px;
-    color: #27272a;
+    color: #71717a;
     margin-left: 8px;
 }
-#signal.selected-sig { color: #52525b; }
 entry {
     background-color: transparent;
     color: #e4e4e7;
