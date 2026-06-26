@@ -132,7 +132,8 @@ mkdir -p ~/.local/bin
 ln -sf "$DOTFILES/.local/bin/clipboard"              ~/.local/bin/clipboard
 ln -sf "$DOTFILES/.local/bin/first-empty-workspace"  ~/.local/bin/first-empty-workspace
 ln -sf "$DOTFILES/.local/bin/power-profile"          ~/.local/bin/power-profile
-chmod +x "$DOTFILES/.local/bin/clipboard" "$DOTFILES/.local/bin/first-empty-workspace" "$DOTFILES/.local/bin/power-profile"
+ln -sf "$DOTFILES/.local/bin/volume-popup"           ~/.local/bin/volume-popup
+chmod +x "$DOTFILES/.local/bin/clipboard" "$DOTFILES/.local/bin/first-empty-workspace" "$DOTFILES/.local/bin/power-profile" "$DOTFILES/.local/bin/volume-popup"
 
 echo ""
 echo "==> Installing TUI apps not in dnf..."
