@@ -131,7 +131,8 @@ echo "==> Linking scripts..."
 mkdir -p ~/.local/bin
 ln -sf "$DOTFILES/.local/bin/clipboard"              ~/.local/bin/clipboard
 ln -sf "$DOTFILES/.local/bin/first-empty-workspace"  ~/.local/bin/first-empty-workspace
-chmod +x "$DOTFILES/.local/bin/clipboard" "$DOTFILES/.local/bin/first-empty-workspace"
+ln -sf "$DOTFILES/.local/bin/power-profile"          ~/.local/bin/power-profile
+chmod +x "$DOTFILES/.local/bin/clipboard" "$DOTFILES/.local/bin/first-empty-workspace" "$DOTFILES/.local/bin/power-profile"
 
 echo ""
 echo "==> Installing TUI apps not in dnf..."

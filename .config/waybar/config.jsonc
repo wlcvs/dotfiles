@@ -7,6 +7,7 @@
     "modules-right": [
         "network",
         "pulseaudio",
+        "custom/power-profile",
         "battery"
     ],
 
@@ -42,6 +43,13 @@
         "format-ethernet": "ETH",
         "format-disconnected": "NO NET",
         "format-linked": "NO IP",
+        "tooltip": false
+    },
+
+    "custom/power-profile": {
+        "exec": "power-profile",
+        "interval": 3,
+        "on-click": "power-profile cycle",
         "tooltip": false
     },
 
