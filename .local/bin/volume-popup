@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import gi, os, sys, signal
+import gi, os, sys, signal, threading
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkLayerShell', '0.1')
 from gi.repository import Gtk, Gdk, GLib, GtkLayerShell
@@ -34,17 +34,16 @@ window {
     border: 1px solid #27272a;
 }
 #wrap {
-    padding: 6px 5px 6px 5px;
+    padding: 8px 10px;
 }
 scale {
     outline: none;
-    min-width: 16px;
 }
 scale trough {
     background-color: #1c1c1e;
     min-width: 4px;
     border-radius: 0;
-    margin: 0 6px;
+    min-height: 90px;
 }
 scale highlight {
     background-color: #52525b;
@@ -53,11 +52,11 @@ scale highlight {
 scale slider {
     background-color: #e4e4e7;
     border-radius: 0;
-    min-width: 16px;
-    min-height: 4px;
+    min-width: 20px;
+    min-height: 6px;
     border: none;
     box-shadow: none;
-    margin: 0;
+    margin: 0 -8px;
 }
 scale slider:hover {
     background-color: #ffffff;
@@ -66,7 +65,7 @@ scale slider:hover {
     color: #71717a;
     font-family: "JetBrains Mono";
     font-size: 10px;
-    margin-top: 4px;
+    margin-top: 6px;
 }
 #label.muted {
     color: #3f3f46;
@@ -92,6 +91,8 @@ class VolumePopup(Gtk.Window):
     def __init__(self):
         super().__init__()
 
+        GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGTERM, self._quit)
+
         GtkLayerShell.init_for_window(self)
         GtkLayerShell.set_layer(self, GtkLayerShell.Layer.TOP)
         GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
@@ -106,26 +107,21 @@ class VolumePopup(Gtk.Window):
             Gdk.Screen.get_default(), css,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
-        self.set_size_request(60, -1)
         self.vol, self.muted = get_vol()
         self._block = False
 
+        # Centered column layout
         wrap = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         wrap.set_name('wrap')
-        wrap.set_hexpand(True)
 
         self.scale = Gtk.Scale.new_with_range(Gtk.Orientation.VERTICAL, 0, 100, 1)
         self.scale.set_inverted(True)
         self.scale.set_draw_value(False)
-        self.scale.set_size_request(28, 100)
-        self.scale.set_halign(Gtk.Align.CENTER)
-        self.scale.set_hexpand(False)
         self.scale.set_value(self.vol)
         self.scale.connect('value-changed', self._on_scale)
 
         self.lbl = Gtk.Label()
         self.lbl.set_name('label')
-        self.lbl.set_halign(Gtk.Align.CENTER)
         self._refresh_label()
 
         wrap.pack_start(self.scale, True, True, 0)
@@ -134,31 +130,26 @@ class VolumePopup(Gtk.Window):
 
         self.connect('key-press-event', self._on_key)
         self.connect('destroy', self._cleanup)
-        GLib.timeout_add(400, lambda: [self.connect('focus-out-event', lambda *_: GLib.timeout_add(100, self._quit)), False][1])
         self._start_sway_watch()
 
     def _start_sway_watch(self):
         self._sway = subprocess.Popen(
             ['swaymsg', '-t', 'subscribe', '["workspace","window"]'],
-            stdout=subprocess.PIPE)
-        GLib.io_add_watch(self._sway.stdout, GLib.IO_IN, self._on_sway_event)
+            stdout=subprocess.PIPE, bufsize=1)
+        t = threading.Thread(target=self._sway_thread, daemon=True)
+        t.start()
 
-    def _on_sway_event(self, src, _cond):
-        line = src.readline()
-        if not line:
-            return False
-        try:
-            ev = json.loads(line)
-            change = ev.get('change', '')
-            # workspace switch: has 'current' field
-            # new window opened: has 'container' field and change=='new'
-            if ('current' in ev and change == 'focus') or \
-               ('container' in ev and change == 'new'):
-                self._quit()
-                return False
-        except Exception:
-            pass
-        return True
+    def _sway_thread(self):
+        for raw in self._sway.stdout:
+            try:
+                ev = json.loads(raw)
+                change = ev.get('change', '')
+                if ('current' in ev and change == 'focus') or \
+                   ('container' in ev and change == 'new'):
+                    GLib.idle_add(self._quit)
+                    return
+            except Exception:
+                pass
 
     def _cleanup(self, *_):
         if hasattr(self, '_sway'):
@@ -167,10 +158,12 @@ class VolumePopup(Gtk.Window):
             os.unlink(PIDFILE)
         except OSError:
             pass
+        return False
 
-    def _quit(self):
+    def _quit(self, *_):
         self._cleanup()
         Gtk.main_quit()
+        return False
 
     def _refresh_label(self):
         ctx = self.lbl.get_style_context()
