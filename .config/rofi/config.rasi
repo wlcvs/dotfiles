@@ -3,7 +3,7 @@ configuration {
     click-to-exit:      true;
     me-accept-entry:    "MousePrimary";
     me-select-entry:    "";
-    kb-cancel:          "Escape,MouseSecondary";
+    kb-cancel:          "Escape,MouseSecondary,super+d";
 }
 
 @theme "~/.config/rofi/theme.rasi"
