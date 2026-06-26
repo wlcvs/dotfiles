@@ -15,6 +15,7 @@ sudo dnf install -y \
   bluez \
   greetd tuigreet \
   wlogout \
+  breeze-cursor-theme \
   fd-find ripgrep gcc \
   jetbrains-mono-fonts \
   git curl
