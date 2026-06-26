@@ -41,9 +41,10 @@ scale {
 }
 scale trough {
     background-color: #1c1c1e;
-    min-width: 4px;
     border-radius: 0;
+    min-width: 4px;
     min-height: 90px;
+    margin: 0 13px;
 }
 scale highlight {
     background-color: #52525b;
@@ -107,21 +108,23 @@ class VolumePopup(Gtk.Window):
             Gdk.Screen.get_default(), css,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
+        self.set_size_request(50, -1)
         self.vol, self.muted = get_vol()
         self._block = False
 
-        # Centered column layout
         wrap = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         wrap.set_name('wrap')
 
         self.scale = Gtk.Scale.new_with_range(Gtk.Orientation.VERTICAL, 0, 100, 1)
         self.scale.set_inverted(True)
         self.scale.set_draw_value(False)
+        self.scale.set_hexpand(True)
         self.scale.set_value(self.vol)
         self.scale.connect('value-changed', self._on_scale)
 
         self.lbl = Gtk.Label()
         self.lbl.set_name('label')
+        self.lbl.set_halign(Gtk.Align.CENTER)
         self._refresh_label()
 
         wrap.pack_start(self.scale, True, True, 0)
