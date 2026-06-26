@@ -27,14 +27,14 @@ window {
     border: 1px solid #27272a;
 }
 #wrap {
-    padding: 10px 8px 12px 8px;
+    padding: 6px 6px 8px 6px;
 }
-scale { outline: none; min-width: 32px; }
+scale { outline: none; min-width: 20px; }
 scale trough {
     background-color: #1c1c1e;
-    min-width: 6px;
+    min-width: 4px;
     border-radius: 0;
-    margin: 0 13px;
+    margin: 0 8px;
 }
 scale highlight {
     background-color: #52525b;
@@ -43,8 +43,8 @@ scale highlight {
 scale slider {
     background-color: #e4e4e7;
     border-radius: 0;
-    min-width: 28px;
-    min-height: 6px;
+    min-width: 18px;
+    min-height: 4px;
     border: none;
     box-shadow: none;
     margin: 0;
@@ -54,7 +54,7 @@ scale slider:hover { background-color: #ffffff; }
     color: #a1a1aa;
     font-family: "JetBrains Mono";
     font-size: 10px;
-    margin-top: 8px;
+    margin-top: 6px;
 }
 #muted { color: #52525b; }
 """
@@ -80,7 +80,7 @@ class VolumePopup(Gtk.Window):
 
         GtkLayerShell.init_for_window(self)
         GtkLayerShell.set_layer(self, GtkLayerShell.Layer.TOP)
-        GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
+        GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.EXCLUSIVE)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 26)
@@ -101,7 +101,7 @@ class VolumePopup(Gtk.Window):
         self.scale = Gtk.Scale.new_with_range(Gtk.Orientation.VERTICAL, 0, 100, 1)
         self.scale.set_inverted(True)
         self.scale.set_draw_value(False)
-        self.scale.set_size_request(48, 160)
+        self.scale.set_size_request(34, 100)
         self.scale.set_value(self.vol)
         self.scale.connect('value-changed', self._on_scale)
 
@@ -114,7 +114,6 @@ class VolumePopup(Gtk.Window):
         self.add(wrap)
 
         self.connect('key-press-event', self._on_key)
-        self.connect('focus-out-event', lambda *_: GLib.timeout_add(100, self._quit))
         self.connect('destroy', self._cleanup)
 
     def _quit(self):
