@@ -3,7 +3,7 @@ import gi, os, sys, signal
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkLayerShell', '0.1')
 from gi.repository import Gtk, Gdk, GLib, GtkLayerShell
-import subprocess
+import subprocess, json
 
 PIDFILE = '/tmp/volume-popup.pid'
 
@@ -106,17 +106,20 @@ class VolumePopup(Gtk.Window):
             Gdk.Screen.get_default(), css,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
+        self.set_size_request(60, -1)
         self.vol, self.muted = get_vol()
         self._block = False
 
         wrap = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         wrap.set_name('wrap')
+        wrap.set_hexpand(True)
 
         self.scale = Gtk.Scale.new_with_range(Gtk.Orientation.VERTICAL, 0, 100, 1)
         self.scale.set_inverted(True)
         self.scale.set_draw_value(False)
         self.scale.set_size_request(28, 100)
         self.scale.set_halign(Gtk.Align.CENTER)
+        self.scale.set_hexpand(False)
         self.scale.set_value(self.vol)
         self.scale.connect('value-changed', self._on_scale)
 
@@ -125,7 +128,6 @@ class VolumePopup(Gtk.Window):
         self.lbl.set_halign(Gtk.Align.CENTER)
         self._refresh_label()
 
-        wrap.set_halign(Gtk.Align.CENTER)
         wrap.pack_start(self.scale, True, True, 0)
         wrap.pack_start(self.lbl, False, False, 0)
         self.add(wrap)
@@ -133,8 +135,29 @@ class VolumePopup(Gtk.Window):
         self.connect('key-press-event', self._on_key)
         self.connect('destroy', self._cleanup)
         GLib.timeout_add(400, lambda: [self.connect('focus-out-event', lambda *_: GLib.timeout_add(100, self._quit)), False][1])
+        self._start_sway_watch()
+
+    def _start_sway_watch(self):
+        self._sway = subprocess.Popen(
+            ['swaymsg', '-t', 'subscribe', '["workspace","window"]'],
+            stdout=subprocess.PIPE)
+        GLib.io_add_watch(self._sway.stdout, GLib.IO_IN, self._on_sway_event)
+
+    def _on_sway_event(self, src, _cond):
+        line = src.readline()
+        if not line:
+            return False
+        try:
+            if json.loads(line).get('change') in ('focus', 'new'):
+                self._quit()
+                return False
+        except Exception:
+            pass
+        return True
 
     def _cleanup(self, *_):
+        if hasattr(self, '_sway'):
+            self._sway.terminate()
         try:
             os.unlink(PIDFILE)
         except OSError:
