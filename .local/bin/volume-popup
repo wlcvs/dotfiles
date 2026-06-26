@@ -116,13 +116,16 @@ class VolumePopup(Gtk.Window):
         self.scale.set_inverted(True)
         self.scale.set_draw_value(False)
         self.scale.set_size_request(28, 100)
+        self.scale.set_halign(Gtk.Align.CENTER)
         self.scale.set_value(self.vol)
         self.scale.connect('value-changed', self._on_scale)
 
         self.lbl = Gtk.Label()
         self.lbl.set_name('label')
+        self.lbl.set_halign(Gtk.Align.CENTER)
         self._refresh_label()
 
+        wrap.set_halign(Gtk.Align.CENTER)
         wrap.pack_start(self.scale, True, True, 0)
         wrap.pack_start(self.lbl, False, False, 0)
         self.add(wrap)
