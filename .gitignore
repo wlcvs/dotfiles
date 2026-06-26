@@ -18,8 +18,4 @@ icons/
 .config/Code/
 .vscode-argv.json
 
-# Fedora login manager — in dotfiles-sway
-system/greetd-config.toml
-
-# VS Code XDG config (duplicates .vscode-argv.json)
-.config/Code/argv.json
+system/
