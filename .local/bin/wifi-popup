@@ -41,41 +41,27 @@ row:selected, row:focus {
     font-size: 11px;
     color: #71717a;
 }
-#net-row.connected {
-    color: #e4e4e7;
-}
-#net-row.saved {
-    color: #a1a1aa;
-}
+#net-row.connected { color: #e4e4e7; }
+#net-row.saved     { color: #a1a1aa; }
 #signal {
     font-family: "JetBrains Mono";
     font-size: 10px;
     color: #3f3f46;
     margin-left: 8px;
 }
-#pwd-view {
-    padding: 10px;
-}
-#pwd-ssid {
-    color: #71717a;
-    font-family: "JetBrains Mono";
-    font-size: 11px;
-    margin-bottom: 6px;
-}
 entry {
-    background-color: #111111;
+    background-color: transparent;
     color: #e4e4e7;
-    border: 1px solid #27272a;
+    border: none;
     border-radius: 0;
+    border-bottom: 1px solid #52525b;
     font-family: "JetBrains Mono";
     font-size: 11px;
-    padding: 4px 8px;
+    padding: 0;
     box-shadow: none;
     outline: none;
+    min-height: 0;
     caret-color: #e4e4e7;
-}
-entry:focus {
-    border-color: #52525b;
 }
 """
 
@@ -125,7 +111,6 @@ class WifiPopup(Gtk.Window):
     def __init__(self):
         super().__init__()
 
-        # SIGTERM handler so waybar toggle works
         GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGTERM, self._quit)
 
         GtkLayerShell.init_for_window(self)
@@ -134,7 +119,7 @@ class WifiPopup(Gtk.Window):
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 4)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 150)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 115)
 
         css = Gtk.CssProvider()
         css.load_from_data(CSS)
@@ -144,12 +129,8 @@ class WifiPopup(Gtk.Window):
 
         self.set_size_request(260, -1)
         self._networks = get_networks()
+        self._active_row = None
 
-        self.stack = Gtk.Stack()
-        self.stack.set_transition_type(Gtk.StackTransitionType.NONE)
-
-        # ── List view ──
-        self.list_box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         scroll = Gtk.ScrolledWindow()
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scroll.set_min_content_height(min(len(self._networks) * 28, 220))
@@ -164,22 +145,8 @@ class WifiPopup(Gtk.Window):
             self.listbox.add(self._make_row(net))
 
         scroll.add(self.listbox)
-        self.list_box_outer.pack_start(scroll, False, False, 0)
-        self.stack.add_named(self.list_box_outer, 'list')
+        self.add(scroll)
 
-        # ── Password view ──
-        self.pwd_view = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.pwd_view.set_name('pwd-view')
-
-        self.pwd_entry = Gtk.Entry()
-        self.pwd_entry.set_visibility(False)
-        self.pwd_entry.set_placeholder_text('password')
-        self.pwd_entry.connect('activate', self._on_pwd_enter)
-
-        self.pwd_view.pack_start(self.pwd_entry, False, False, 0)
-        self.stack.add_named(self.pwd_view, 'password')
-
-        self.add(self.stack)
         self.connect('key-press-event', self._on_key)
         self.connect('destroy', self._cleanup)
 
@@ -200,6 +167,14 @@ class WifiPopup(Gtk.Window):
         lbl.set_hexpand(True)
         lbl.set_ellipsize(3)
 
+        entry = Gtk.Entry()
+        entry.set_visibility(False)
+        entry.set_placeholder_text('password')
+        entry.set_hexpand(True)
+        entry.set_no_show_all(True)
+        entry.connect('activate', lambda e, s=net['ssid']: self._pwd_confirm(s, e))
+        entry.connect('key-press-event', self._entry_key)
+
         sig = Gtk.Label(label=f"{net['signal']}%")
         sig.set_name('signal')
 
@@ -207,12 +182,15 @@ class WifiPopup(Gtk.Window):
         lock.set_name('signal')
 
         box.pack_start(lbl, True, True, 0)
+        box.pack_start(entry, True, True, 0)
         box.pack_start(sig, False, False, 0)
         box.pack_start(lock, False, False, 0)
 
         row = Gtk.ListBoxRow()
         row.add(box)
-        row._net = net
+        row._net   = net
+        row._lbl   = lbl
+        row._entry = entry
         return row
 
     def _on_activate(self, _lb, row):
@@ -221,29 +199,38 @@ class WifiPopup(Gtk.Window):
             self._quit()
             return
         if net['secured'] and not net['saved']:
-            self._pending = net['ssid']
-            self.pwd_entry.set_text('')
-            self.stack.set_visible_child_name('password')
-            self.pwd_entry.grab_focus()
+            self._restore_active()
+            self._active_row = row
+            row._lbl.hide()
+            row._entry.set_text('')
+            row._entry.show()
+            row._entry.grab_focus()
         else:
             connect(net['ssid'])
             self._quit()
 
-    def _on_pwd_enter(self, entry):
+    def _restore_active(self):
+        if self._active_row:
+            self._active_row._entry.hide()
+            self._active_row._lbl.show()
+            self._active_row = None
+
+    def _pwd_confirm(self, ssid, entry):
         pwd = entry.get_text().strip()
         if pwd:
-            connect(self._pending, pwd)
+            connect(ssid, pwd)
         self._quit()
 
+    def _entry_key(self, _entry, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self._restore_active()
+            self.listbox.grab_focus()
+        return False
+
     def _on_key(self, _w, event):
+        if self._active_row:
+            return False  # let entry handle keys
         k = event.keyval
-        current = self.stack.get_visible_child_name()
-
-        if current == 'password':
-            if k == Gdk.KEY_Escape:
-                self.stack.set_visible_child_name('list')
-            return False  # let entry handle typing
-
         if k in (Gdk.KEY_Escape, ord('q')):
             self._quit()
         elif k in (ord('j'), Gdk.KEY_Down):
