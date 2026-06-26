@@ -1,0 +1,20 @@
+# WM-specific — in separate repos (dotfiles-sway, dotfiles-qtile)
+.config/sway/
+.config/swaylock/
+.config/swaynag/
+.config/waybar/
+
+# Neovim — standalone repo (wlcvs/nvim)
+.config/nvim/
+
+# Sway-specific scripts
+.local/bin/sway-alt-tab
+.local/bin/first-empty-workspace
+.local/bin/volume-popup
+.local/bin/wifi-popup
+
+# Fedora login manager — in dotfiles-sway
+system/greetd-config.toml
+
+# VS Code XDG config (duplicates .vscode-argv.json)
+.config/Code/argv.json
