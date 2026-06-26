@@ -12,14 +12,12 @@ sudo pacman -S --needed \
   github-cli \
   zsh \
   ttf-jetbrains-mono \
-  rofi dunst \
   brightnessctl playerctl \
   wl-clipboard \
   fzf ripgrep fd \
   eza bat jq \
   lazygit \
   git curl wget unzip \
-  gtk3 gtk4 gnome-themes-extra \
   python-pip \
   xdg-user-dirs
 
@@ -33,8 +31,7 @@ yay -S --needed \
   fastfetch \
   tldr \
   mpv \
-  imagemagick \
-  wlsunset
+  imagemagick
 
 echo "==> Setting zsh as default shell..."
 sudo chsh -s /usr/bin/zsh "$USER"
@@ -59,24 +56,6 @@ echo "==> Linking dotfiles..."
 mkdir -p ~/.config/alacritty
 ln -sf "$DOTFILES/.config/alacritty/alacritty.toml" ~/.config/alacritty/
 
-# Rofi
-mkdir -p ~/.config/rofi
-ln -sf "$DOTFILES/.config/rofi/config.rasi" ~/.config/rofi/
-ln -sf "$DOTFILES/.config/rofi/theme.rasi"  ~/.config/rofi/
-
-# Dunst
-mkdir -p ~/.config/dunst
-ln -sf "$DOTFILES/.config/dunst/dunstrc" ~/.config/dunst/
-
-# GTK
-mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0
-ln -sf "$DOTFILES/.config/gtk-3.0/settings.ini" ~/.config/gtk-3.0/
-ln -sf "$DOTFILES/.config/gtk-4.0/settings.ini" ~/.config/gtk-4.0/
-gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita'
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-White'
-gsettings set org.gnome.desktop.interface cursor-size 24
-
 # tmux, zsh, p10k
 ln -sf "$DOTFILES/.tmux.conf" ~/
 ln -sf "$DOTFILES/.zshrc"     ~/
@@ -92,10 +71,9 @@ mkdir -p ~/.local/share/icons/hicolor/512x512/apps
 cp "$DOTFILES/icons/code-gray.png" ~/.local/share/icons/hicolor/512x512/apps/vscode.png
 gtk-update-icon-cache ~/.local/share/icons/hicolor 2>/dev/null || true
 
-# Desktop files (TUI apps in Rofi)
-sudo cp "$DOTFILES/applications/"*.desktop /usr/local/share/applications/ 2>/dev/null || \
-  cp "$DOTFILES/applications/"*.desktop ~/.local/share/applications/
+# Desktop files (TUI apps — picked up by any launcher)
 mkdir -p ~/.local/share/applications
+cp "$DOTFILES/applications/"*.desktop ~/.local/share/applications/
 cp "$DOTFILES/applications/hidden/"*.desktop ~/.local/share/applications/
 
 echo "==> Linking scripts..."

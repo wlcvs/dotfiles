@@ -3,6 +3,10 @@
 .config/swaylock/
 .config/swaynag/
 .config/waybar/
+.config/rofi/
+.config/dunst/
+.config/gtk-3.0/
+.config/gtk-4.0/
 
 # Neovim — standalone repo (wlcvs/nvim)
 .config/nvim/
