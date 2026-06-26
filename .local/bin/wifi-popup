@@ -31,18 +31,14 @@ row {
     background-color: transparent;
     outline: none;
 }
-row:selected, row:focus {
-    background-color: #111111;
-    outline: none;
-}
+row:selected { background-color: #111111; outline: none; }
 #net-row {
     padding: 5px 10px;
     font-family: "JetBrains Mono";
     font-size: 11px;
-    color: #71717a;
+    color: #a1a1aa;
 }
 #net-row.connected { color: #e4e4e7; }
-#net-row.saved     { color: #a1a1aa; }
 #signal {
     font-family: "JetBrains Mono";
     font-size: 10px;
@@ -72,14 +68,12 @@ def get_networks():
             text=True)
     except Exception:
         return []
-
     saved = set()
     try:
         s = subprocess.check_output(['nmcli', '-t', '-f', 'NAME', 'con', 'show'], text=True)
         saved = {l.strip() for l in s.splitlines() if l.strip()}
     except Exception:
         pass
-
     seen, nets = set(), []
     for line in out.splitlines():
         parts = line.split(':', 3)
@@ -97,11 +91,10 @@ def get_networks():
             'saved':     ssid in saved,
             'connected': active.strip() in ('sim', 'yes'),
         })
-
     nets.sort(key=lambda n: (not n['connected'], not n['saved'], -n['signal']))
     return nets
 
-def connect(ssid, password=None):
+def connect_net(ssid, password=None):
     if password:
         subprocess.Popen(['nmcli', 'dev', 'wifi', 'connect', ssid, 'password', password])
     else:
@@ -128,13 +121,13 @@ class WifiPopup(Gtk.Window):
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
         self.set_size_request(260, -1)
-        self._networks = get_networks()
+        self._networks  = get_networks()
         self._active_row = None
 
-        scroll = Gtk.ScrolledWindow()
-        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        scroll.set_min_content_height(min(len(self._networks) * 28, 220))
-        scroll.set_max_content_height(220)
+        self.scroll = Gtk.ScrolledWindow()
+        self.scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.scroll.set_min_content_height(min(len(self._networks) * 28, 220))
+        self.scroll.set_max_content_height(220)
 
         self.listbox = Gtk.ListBox()
         self.listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
@@ -144,10 +137,11 @@ class WifiPopup(Gtk.Window):
         for net in self._networks:
             self.listbox.add(self._make_row(net))
 
-        scroll.add(self.listbox)
-        self.add(scroll)
+        self.scroll.add(self.listbox)
+        self.add(self.scroll)
 
         self.connect('key-press-event', self._on_key)
+        self.connect('focus-out-event', lambda *_: GLib.timeout_add(150, self._quit))
         self.connect('destroy', self._cleanup)
 
         if self._networks:
@@ -156,11 +150,8 @@ class WifiPopup(Gtk.Window):
     def _make_row(self, net):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         box.set_name('net-row')
-        ctx = box.get_style_context()
         if net['connected']:
-            ctx.add_class('connected')
-        elif net['saved']:
-            ctx.add_class('saved')
+            box.get_style_context().add_class('connected')
 
         lbl = Gtk.Label(label=net['ssid'])
         lbl.set_halign(Gtk.Align.START)
@@ -175,16 +166,15 @@ class WifiPopup(Gtk.Window):
         entry.connect('activate', lambda e, s=net['ssid']: self._pwd_confirm(s, e))
         entry.connect('key-press-event', self._entry_key)
 
-        sig = Gtk.Label(label=f"{net['signal']}%")
+        sig  = Gtk.Label(label=f"{net['signal']}%")
         sig.set_name('signal')
-
         lock = Gtk.Label(label=' *' if net['secured'] else '')
         lock.set_name('signal')
 
-        box.pack_start(lbl, True, True, 0)
-        box.pack_start(entry, True, True, 0)
-        box.pack_start(sig, False, False, 0)
-        box.pack_start(lock, False, False, 0)
+        box.pack_start(lbl,   True,  True,  0)
+        box.pack_start(entry, True,  True,  0)
+        box.pack_start(sig,   False, False, 0)
+        box.pack_start(lock,  False, False, 0)
 
         row = Gtk.ListBoxRow()
         row.add(box)
@@ -206,7 +196,7 @@ class WifiPopup(Gtk.Window):
             row._entry.show()
             row._entry.grab_focus()
         else:
-            connect(net['ssid'])
+            connect_net(net['ssid'])
             self._quit()
 
     def _restore_active(self):
@@ -218,7 +208,7 @@ class WifiPopup(Gtk.Window):
     def _pwd_confirm(self, ssid, entry):
         pwd = entry.get_text().strip()
         if pwd:
-            connect(ssid, pwd)
+            connect_net(ssid, pwd)
         self._quit()
 
     def _entry_key(self, _entry, event):
@@ -227,24 +217,35 @@ class WifiPopup(Gtk.Window):
             self.listbox.grab_focus()
         return False
 
+    def _scroll_to(self, row):
+        alloc = row.get_allocation()
+        adj   = self.scroll.get_vadjustment()
+        val   = adj.get_value()
+        page  = adj.get_page_size()
+        if alloc.y < val:
+            adj.set_value(alloc.y)
+        elif alloc.y + alloc.height > val + page:
+            adj.set_value(alloc.y + alloc.height - page)
+
+    def _move(self, delta):
+        self._restore_active()
+        row = self.listbox.get_selected_row()
+        idx = row.get_index() if row else -1
+        nxt = self.listbox.get_row_at_index(idx + delta)
+        if nxt:
+            self.listbox.select_row(nxt)
+            self._scroll_to(nxt)
+
     def _on_key(self, _w, event):
         if self._active_row:
-            return False  # let entry handle keys
+            return False
         k = event.keyval
         if k in (Gdk.KEY_Escape, ord('q')):
             self._quit()
         elif k in (ord('j'), Gdk.KEY_Down):
-            row = self.listbox.get_selected_row()
-            if row:
-                nxt = self.listbox.get_row_at_index(row.get_index() + 1)
-                if nxt:
-                    self.listbox.select_row(nxt)
+            self._move(+1)
         elif k in (ord('k'), Gdk.KEY_Up):
-            row = self.listbox.get_selected_row()
-            if row:
-                prv = self.listbox.get_row_at_index(row.get_index() - 1)
-                if prv:
-                    self.listbox.select_row(prv)
+            self._move(-1)
         elif k in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
             row = self.listbox.get_selected_row()
             if row:
