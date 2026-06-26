@@ -34,17 +34,18 @@ window {
     border: 1px solid #27272a;
 }
 #wrap {
-    padding: 8px 10px;
+    padding: 8px 0;
 }
 scale {
     outline: none;
+    min-width: 20px;
 }
 scale trough {
     background-color: #1c1c1e;
     border-radius: 0;
     min-width: 4px;
     min-height: 90px;
-    margin: 0 13px;
+    margin: 0 8px;
 }
 scale highlight {
     background-color: #52525b;
@@ -108,7 +109,6 @@ class VolumePopup(Gtk.Window):
             Gdk.Screen.get_default(), css,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
-        self.set_size_request(50, -1)
         self.vol, self.muted = get_vol()
         self._block = False
 
@@ -118,16 +118,24 @@ class VolumePopup(Gtk.Window):
         self.scale = Gtk.Scale.new_with_range(Gtk.Orientation.VERTICAL, 0, 100, 1)
         self.scale.set_inverted(True)
         self.scale.set_draw_value(False)
-        self.scale.set_hexpand(True)
+        self.scale.set_size_request(20, 80)
         self.scale.set_value(self.vol)
         self.scale.connect('value-changed', self._on_scale)
+
+        # Spacers force scale to center horizontally
+        row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        sp1 = Gtk.Box(); sp1.set_hexpand(True)
+        sp2 = Gtk.Box(); sp2.set_hexpand(True)
+        row.pack_start(sp1, True, True, 0)
+        row.pack_start(self.scale, False, False, 0)
+        row.pack_start(sp2, True, True, 0)
 
         self.lbl = Gtk.Label()
         self.lbl.set_name('label')
         self.lbl.set_halign(Gtk.Align.CENTER)
         self._refresh_label()
 
-        wrap.pack_start(self.scale, True, True, 0)
+        wrap.pack_start(row, True, True, 0)
         wrap.pack_start(self.lbl, False, False, 0)
         self.add(wrap)
 
