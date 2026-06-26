@@ -11,7 +11,8 @@
 # Neovim — standalone repo (wlcvs/nvim)
 .config/nvim/
 
-# Sway-specific scripts
+# WM-specific scripts — in each WM repo
+.local/bin/clipboard
 .local/bin/sway-alt-tab
 .local/bin/first-empty-workspace
 .local/bin/volume-popup

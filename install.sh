@@ -46,11 +46,9 @@ cp "$DOTFILES/applications/hidden/"*.desktop ~/.local/share/applications/
 
 echo "==> Linking scripts..."
 mkdir -p ~/.local/bin
-ln -sf "$DOTFILES/.local/bin/clipboard"     ~/.local/bin/clipboard
 ln -sf "$DOTFILES/.local/bin/volume-tui"    ~/.local/bin/volume-tui
 ln -sf "$DOTFILES/.local/bin/power-profile" ~/.local/bin/power-profile
 chmod +x \
-  "$DOTFILES/.local/bin/clipboard" \
   "$DOTFILES/.local/bin/volume-tui" \
   "$DOTFILES/.local/bin/power-profile"
 
