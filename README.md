@@ -1,9 +1,9 @@
 # dotfiles
 
-Base configuration for **CachyOS** — WM-agnostic.
+Base configuration — shell, terminal, editor tools. WM-agnostic.
 
-> WM-specific layers: [dotfiles-qtile](https://github.com/wlcvs/dotfiles-qtile) · [dotfiles-sway](https://github.com/wlcvs/dotfiles-sway)
-> Neovim: [nvim](https://github.com/wlcvs/nvim)
+> WM layers: [dotfiles-sway](https://github.com/wlcvs/dotfiles-sway) · [dotfiles-qtile](https://github.com/wlcvs/dotfiles-qtile)
+> Editor: [nvim](https://github.com/wlcvs/nvim)
 
 ## Design
 
@@ -15,10 +15,7 @@ Monochromatic — only black, white, and gray. JetBrains Mono system-wide. No ic
 |---|---|
 | Terminal | Alacritty + tmux |
 | Shell | zsh + Powerlevel10k |
-| Editor | Neovim (see [wlcvs/nvim](https://github.com/wlcvs/nvim)) + VS Code |
-| Launcher | Rofi |
-| Notifications | Dunst |
-| Clipboard history | cliphist + fzf |
+| Editor | Neovim ([wlcvs/nvim](https://github.com/wlcvs/nvim)) + VS Code |
 | File manager | yazi |
 | Audio | PipeWire + pulsemixer |
 | Bluetooth | bluetuith |
@@ -26,25 +23,69 @@ Monochromatic — only black, white, and gray. JetBrains Mono system-wide. No ic
 | System monitor | btop |
 | Git TUI | lazygit |
 | Docker TUI | lazydocker |
-| Browser | Google Chrome |
 
 ## Installation
 
+### 1. Install packages
+
+**Arch**
+```bash
+sudo pacman -S --needed \
+  alacritty tmux neovim zsh git curl unzip \
+  ttf-jetbrains-mono \
+  brightnessctl playerctl wl-clipboard \
+  fzf ripgrep fd bat jq \
+  lazygit python-pip
+
+yay -S --needed \
+  eza zoxide cliphist lazydocker \
+  gum dua-cli fastfetch tldr mpv imagemagick
+```
+
+**Debian / Ubuntu**
+```bash
+sudo apt install \
+  alacritty tmux neovim zsh git curl unzip \
+  fonts-jetbrains-mono \
+  brightnessctl playerctl wl-clipboard \
+  fzf ripgrep fd-find bat jq \
+  python3-pip
+
+# Manually install: eza, zoxide, lazygit, lazydocker, cliphist
+# See each tool's GitHub releases page
+```
+
+**Fedora**
+```bash
+sudo dnf install \
+  alacritty tmux neovim zsh git curl unzip \
+  jetbrains-mono-fonts \
+  brightnessctl playerctl wl-clipboard \
+  fzf ripgrep fd-find bat jq \
+  lazygit python3-pip
+
+# AUR equivalents via COPR or manual install: eza, zoxide, lazydocker, cliphist
+```
+
+### 2. Run install script
 ```bash
 git clone https://github.com/wlcvs/dotfiles ~/dotfiles
 chmod +x ~/dotfiles/install.sh
 ~/dotfiles/install.sh
 ```
 
-After installing:
+### 3. Install Neovim config
 ```bash
-# Neovim
 git clone https://github.com/wlcvs/nvim ~/.config/nvim
-nvim  # plugins install on first launch
+nvim  # plugins install automatically on first launch
+```
 
-# WM layer (pick one)
+### 4. Install a WM layer
+```bash
+# Qtile
 git clone https://github.com/wlcvs/dotfiles-qtile ~/dotfiles-qtile && ~/dotfiles-qtile/install.sh
-# or
+
+# or Sway
 git clone https://github.com/wlcvs/dotfiles-sway ~/dotfiles-sway && ~/dotfiles-sway/install.sh
 ```
 
@@ -55,31 +96,6 @@ Theme: **[QUENCH](https://github.com/wlcvs/quench)** — monochromatic, no color
 ```
 ext install wlcvs.quench
 ```
-
-## TUI Apps (Rofi via Super+D)
-
-| App | Description |
-|---|---|
-| yazi | File manager |
-| pulsemixer | Audio mixer |
-| bluetuith | Bluetooth manager |
-| btop | System monitor |
-| nmtui | Network manager |
-| lazygit | Git client |
-| lazydocker | Docker manager |
-
-## CLI Tools
-
-| Tool | Replaces |
-|---|---|
-| `eza` | `ls` |
-| `bat` | `cat` / `less` |
-| `fzf` | fuzzy finder |
-| `zoxide` | `cd` |
-| `ripgrep` | `grep` |
-| `fd` | `find` |
-| `dua` | `du` |
-| `fastfetch` | neofetch |
 
 ## Shell Aliases
 
@@ -93,7 +109,15 @@ ext install wlcvs.quench
 | `cat` | `bat --paging=never` |
 | `cd` | `zoxide` |
 
-## Keybindings — tmux
+## Scripts (`~/.local/bin`)
+
+| Script | Description |
+|---|---|
+| `clipboard` | Clipboard history — cliphist + fzf (Wayland) |
+| `volume-tui` | Curses volume control via wpctl |
+| `power-profile` | Cycle power profiles via busctl |
+
+## tmux keybindings
 
 Prefix: `Ctrl+A`
 
