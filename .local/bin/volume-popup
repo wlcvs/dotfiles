@@ -88,9 +88,9 @@ class VolumePopup(Gtk.Window):
         GtkLayerShell.init_for_window(self)
         GtkLayerShell.set_layer(self, GtkLayerShell.Layer.TOP)
         GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.BOTTOM, True)
+        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.BOTTOM, 26)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 26)
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 100)
 
         css = Gtk.CssProvider()
