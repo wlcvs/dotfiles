@@ -109,9 +109,10 @@ mkdir -p ~/.local/share/applications
 cp "$DOTFILES/applications/hidden/"*.desktop ~/.local/share/applications/
 update-desktop-database ~/.local/share/applications/
 
-# VS Code argv.json
-mkdir -p ~/.vscode
+# VS Code
+mkdir -p ~/.vscode ~/.config/Code/User
 cp "$DOTFILES/.vscode-argv.json" ~/.vscode/argv.json
+ln -sf "$DOTFILES/.config/Code/User/settings.json" ~/.config/Code/User/settings.json
 
 echo ""
 echo "==> Installing TUI apps not in dnf..."
