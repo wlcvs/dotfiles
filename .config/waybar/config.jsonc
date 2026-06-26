@@ -5,9 +5,8 @@
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": ["clock"],
     "modules-right": [
-        "backlight",
-        "pulseaudio",
         "network",
+        "pulseaudio",
         "battery"
     ],
 
@@ -39,7 +38,7 @@
 
     "network": {
         "interval": 5,
-        "format-wifi": "{essid}",
+        "format-wifi": "Wi-Fi: {essid}",
         "format-ethernet": "ETH",
         "format-disconnected": "NO NET",
         "format-linked": "NO IP",

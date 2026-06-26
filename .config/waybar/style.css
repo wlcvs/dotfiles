@@ -58,7 +58,6 @@ window#waybar {
 }
 
 /* Todos os módulos da direita */
-#backlight,
 #pulseaudio,
 #network,
 #battery,
