@@ -44,18 +44,15 @@ label {
 def get_volume():
     try:
         out = subprocess.check_output(
-            ['pactl', 'get-sink-volume', '@DEFAULT_SINK@'], text=True)
-        for part in out.split('/'):
-            part = part.strip()
-            if part.endswith('%'):
-                return int(part[:-1])
+            ['wpctl', 'get-volume', '@DEFAULT_AUDIO_SINK@'], text=True)
+        # output: "Volume: 0.60" or "Volume: 0.60 [MUTED]"
+        return round(float(out.split()[1]) * 100)
     except Exception:
-        pass
-    return 50
+        return 50
 
 def set_volume(vol):
     subprocess.run(
-        ['pactl', 'set-sink-volume', '@DEFAULT_SINK@', f'{max(0, min(100, int(vol)))}%'])
+        ['wpctl', 'set-volume', '-l', '1.0', '@DEFAULT_AUDIO_SINK@', f'{max(0, min(100, int(vol)))}%'])
 
 class VolumePopup(Gtk.Window):
     def __init__(self):
