@@ -20,6 +20,14 @@ def toggle_or_exit():
 
 toggle_or_exit()
 
+# Close any other popup
+for _pf in ['/tmp/volume-popup.pid']:
+    try:
+        os.kill(int(open(_pf).read()), signal.SIGTERM)
+        os.unlink(_pf)
+    except Exception:
+        pass
+
 CSS = b"""
 window {
     background-color: #0a0a0a;
@@ -32,6 +40,8 @@ row {
     outline: none;
 }
 row:selected { background-color: #111111; outline: none; }
+row:selected #net-row { color: #3f3f46; }
+row:selected #net-row.connected { color: #52525b; }
 #net-row {
     padding: 5px 10px;
     font-family: "JetBrains Mono";
@@ -142,6 +152,7 @@ class WifiPopup(Gtk.Window):
 
         self.connect('key-press-event', self._on_key)
         self.connect('destroy', self._cleanup)
+        GLib.timeout_add(400, self._arm_focus_out)
 
         if self._networks:
             self.listbox.select_row(self.listbox.get_row_at_index(0))
@@ -263,6 +274,10 @@ class WifiPopup(Gtk.Window):
         self.listbox.show_all()
         if self._networks:
             self.listbox.select_row(self.listbox.get_row_at_index(0))
+        return False
+
+    def _arm_focus_out(self):
+        self.connect('focus-out-event', lambda *_: GLib.timeout_add(100, self._quit))
         return False
 
     def _cleanup(self, *_):

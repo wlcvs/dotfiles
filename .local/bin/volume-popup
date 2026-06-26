@@ -21,6 +21,13 @@ def toggle_or_exit():
 
 toggle_or_exit()
 
+for _pf in ['/tmp/wifi-popup.pid']:
+    try:
+        os.kill(int(open(_pf).read()), signal.SIGTERM)
+        os.unlink(_pf)
+    except Exception:
+        pass
+
 CSS = b"""
 window {
     background-color: #0a0a0a;
@@ -122,6 +129,7 @@ class VolumePopup(Gtk.Window):
 
         self.connect('key-press-event', self._on_key)
         self.connect('destroy', self._cleanup)
+        GLib.timeout_add(400, lambda: [self.connect('focus-out-event', lambda *_: GLib.timeout_add(100, self._quit)), False][1])
 
     def _cleanup(self, *_):
         try:
