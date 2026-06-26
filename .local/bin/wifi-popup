@@ -184,11 +184,11 @@ class WifiPopup(Gtk.Window):
 
     def _on_activate(self, _lb, row):
         net = row._net
+        self._restore_active()
         if net['connected']:
             self._quit()
             return
         if net['secured'] and not net['saved']:
-            self._restore_active()
             self._active_row = row
             row._lbl.hide()
             row._entry.set_text('')
