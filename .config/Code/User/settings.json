@@ -32,7 +32,6 @@
   "git.autofetch": true,
   "git.enableSmartCommit": true,
   "git.confirmSync": false,
-  "python.defaultInterpreterPath": "/home/wlcsv/Studies/Matplotlib/.venv",
   "liveServer.settings.donotShowInfoMsg": true,
   "explorer.fileNesting.patterns": {
     "*.ts": "${capture}.js",
