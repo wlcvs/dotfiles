@@ -40,15 +40,15 @@ row {
     outline: none;
 }
 row:selected { background-color: #111111; outline: none; }
-row:selected #net-row { color: #3f3f46; }
-row:selected #net-row.connected { color: #52525b; }
+row:selected #net-row { color: #e4e4e7; }
+row:selected #net-row.connected { color: #ffffff; }
 #net-row {
     padding: 5px 10px;
     font-family: "JetBrains Mono";
     font-size: 11px;
-    color: #a1a1aa;
+    color: #3f3f46;
 }
-#net-row.connected { color: #e4e4e7; }
+#net-row.connected { color: #71717a; }
 #signal {
     font-family: "JetBrains Mono";
     font-size: 10px;
