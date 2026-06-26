@@ -90,7 +90,7 @@ class VolumePopup(Gtk.Window):
         GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 22)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 18)
         # Position under VOL button: battery(~60px) + BAL(~40px) + VOL center
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 100)
 
