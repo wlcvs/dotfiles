@@ -114,6 +114,11 @@ mkdir -p ~/.vscode ~/.config/Code/User
 cp "$DOTFILES/.vscode-argv.json" ~/.vscode/argv.json
 ln -sf "$DOTFILES/.config/Code/User/settings.json" ~/.config/Code/User/settings.json
 
+# VS Code icon (grayscale override)
+mkdir -p ~/.local/share/icons/hicolor/512x512/apps
+cp "$DOTFILES/icons/code-gray.png" ~/.local/share/icons/hicolor/512x512/apps/vscode.png
+gtk-update-icon-cache ~/.local/share/icons/hicolor 2>/dev/null || true
+
 echo ""
 echo "==> Installing TUI apps not in dnf..."
 # yazi

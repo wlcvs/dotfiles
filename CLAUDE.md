@@ -118,11 +118,15 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 - Cursor: `DMZ-White`
 
 ### VS Code
-- Theme: GitHub Dark Dimmed + full zinc palette override via `workbench.colorCustomizations`
-- Syntax: monochrome via `editor.tokenColorCustomizations` (bold/italic for differentiation)
+- Theme: **QUENCH** (github.com/wlcvs/quench) — custom extension, monochromatic, no color anywhere
+- Syntax hierarchy: brightness + bold/italic only (no hue differentiation)
 - Font: JetBrains Mono 13px, ligatures on
-- Icon theme disabled (`null`)
-- `password-store=basic` in `~/.vscode/argv.json`
+- File icon theme disabled (`null`)
+- Native file dialogs replaced with VS Code's own (`window.dialogStyle: custom`)
+- `password-store=basic` in `~/.vscode/argv.json` — gnome-libsecret fails in Sway
+- `vim.handleKeys: { "<C-w>": false }` — lets Ctrl+W reach VS Code instead of vim
+- Application icon: grayscale override at `~/.local/share/icons/hicolor/512x512/apps/vscode.png`
+- Source: `dotfiles/icons/code-gray.png` (desaturated from `/usr/share/pixmaps/vscode.png`)
 
 ### Bluetooth
 - `bluez` backend, service enabled
@@ -171,3 +175,5 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 - Do NOT manually start waybar — Sway starts it automatically on reload
 - Cursor needs to be set in 3 places to cover all apps: sway seat, environment file, gsettings
 - `greetd` requires `greeter` user — if missing, service fails silently in a loop
+- GTK apps use system theme — `GTK_THEME=Adwaita:dark` in `sway/environment` forces dark mode
+- VS Code icon override takes precedence over system icon because `~/.local/share/icons` is searched first

@@ -15,7 +15,7 @@ Monochromatic HUD aesthetic — only black, white, and gray. No icons, no emojis
 | Screen lock | swaylock + swayidle |
 | Terminal | Alacritty + tmux |
 | Shell | zsh + Powerlevel10k |
-| Editor | Neovim (lazy.nvim) |
+| Editor | Neovim (lazy.nvim) + VS Code |
 | Launcher | Rofi |
 | Bar | Waybar |
 | Notifications | Dunst |
@@ -44,6 +44,16 @@ chmod +x install.sh
 After installing, open Neovim — plugins install automatically on first launch.
 
 > **Note:** Docker group membership and logind power config require a reboot to take effect.
+
+## VS Code
+
+Theme: **[QUENCH](https://github.com/wlcvs/quench)** — monochromatic, black/white/gray only, no color anywhere.
+
+Install the extension locally (included in `install.sh`) or from the marketplace:
+
+```
+ext install wlcvs.quench
+```
 
 ## TUI Apps (available in Rofi via Super+D)
 
