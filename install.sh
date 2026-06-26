@@ -16,7 +16,9 @@ sudo dnf install -y \
   greetd tuigreet \
   fd-find ripgrep gcc \
   jetbrains-mono-fonts \
-  git curl
+  git curl \
+  brightnessctl playerctl wlsunset \
+  cliphist fzf
 
 echo "==> Setting zsh as default shell..."
 sudo chsh -s /usr/bin/zsh "$USER"
@@ -56,10 +58,12 @@ mkdir -p ~/.config/sway/config.d
 ln -sf "$DOTFILES/.config/sway/config.d/00-input.conf"               ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/01-terminal.conf"            ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/10-theme.conf"               ~/.config/sway/config.d/
+ln -sf "$DOTFILES/.config/sway/config.d/20-bindings-extra.conf"      ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/60-bindings-screenshot.conf" ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/90-power-menu.conf"          ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/90-swayidle.conf"            ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/config.d/95-gnome-keyring.conf"       ~/.config/sway/config.d/
+ln -sf "$DOTFILES/.config/sway/config.d/98-autostart.conf"           ~/.config/sway/config.d/
 ln -sf "$DOTFILES/.config/sway/environment"                          ~/.config/sway/
 
 # Alacritty
@@ -119,6 +123,12 @@ mkdir -p ~/.local/share/icons/hicolor/512x512/apps
 cp "$DOTFILES/icons/code-gray.png" ~/.local/share/icons/hicolor/512x512/apps/vscode.png
 gtk-update-icon-cache ~/.local/share/icons/hicolor 2>/dev/null || true
 
+echo "==> Linking scripts..."
+mkdir -p ~/.local/bin
+ln -sf "$DOTFILES/.local/bin/clipboard"              ~/.local/bin/clipboard
+ln -sf "$DOTFILES/.local/bin/first-empty-workspace"  ~/.local/bin/first-empty-workspace
+chmod +x "$DOTFILES/.local/bin/clipboard" "$DOTFILES/.local/bin/first-empty-workspace"
+
 echo ""
 echo "==> Installing TUI apps not in dnf..."
 # yazi
@@ -137,8 +147,24 @@ cp /tmp/bluetuith ~/.local/bin/ && chmod +x ~/.local/bin/bluetuith
 # pulsemixer
 pip3 install pulsemixer --user
 
+# autotiling (split automatico por proporcao do container)
+pip3 install autotiling --user
+
 echo ""
 echo "==> Done! Next steps:"
 echo "    1. Reboot (applies logind power config)"
 echo "    2. Open Neovim — plugins install automatically on first launch"
-echo "    3. Run: swaymsg reload (applies sway theme without logout)"
+echo "    3. Run: swaymsg reload (applies sway + new bindings)"
+echo ""
+echo "    New features after reload:"
+echo "      \$mod+r          resize mode (arrow=10px, shift+arrow=50px, +/- gaps)"
+echo "      \$mod+minus      scratchpad show"
+echo "      \$mod+Shift+minus move to scratchpad"
+echo "      \$mod+Tab        workspace back_and_forth"
+echo "      Alt+Tab         rofi window switcher (all workspaces)"
+echo "      \$mod+n          primeiro workspace vazio"
+echo "      \$mod+Shift+b    toggle waybar"
+echo "      \$mod+Shift+p    clipboard history (cliphist + fzf)"
+echo "      \$mod+Shift+d    do-not-disturb toggle (dunst)"
+echo "      XF86 keys       volume, brilho, media (funcionam com tela travada)"
+echo "      wlsunset        night mode automatico (06:30-18:30)"

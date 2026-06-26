@@ -39,10 +39,12 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 - `00-input.conf` — keyboard layout `br/thinkpad` (ABNT2), caps↔esc swap, touchpad tap + natural scroll, `DMZ-White` cursor via `seat *`
 - `01-terminal.conf` — Alacritty as default terminal, Rofi set to `drun` with theme
 - `10-theme.conf` — wallpaper `#3f3f3f` solid, border colors (monochromatic), 1px border, 6px inner gaps
+- `20-bindings-extra.conf` — resize mode ($mod+r), scratchpad ($mod+minus), Alt+Tab window switcher, $mod+Tab back_and_forth, $mod+Shift+b toggle waybar, $mod+n first empty workspace, $mod+Shift+p clipboard, $mod+Shift+d DND, XF86 media/volume/brightness keys (--locked), touchpad toggle
 - `60-bindings-screenshot.conf` — Print=area→clipboard, Alt=window, Ctrl=fullscreen, Shift=save
 - `90-power-menu.conf` — overrides `Super+Shift+E` with a named sway mode; options shown in Waybar `sway/mode`
 - `90-swayidle.conf` — overrides Fedora default; dim→lock→display off→suspend sequence
 - `95-gnome-keyring.conf` — starts gnome-keyring-daemon with secrets/ssh components
+- `98-autostart.conf` — background daemons: cliphist (clipboard history), autotiling, wlsunset (night mode 06:30-18:30, 6500K→4000K)
 
 ### Sway environment (`~/.config/sway/environment`)
 - `NO_COLOR=1` — suppresses ANSI colors in CLIs that respect the standard
@@ -145,8 +147,22 @@ Monochromatic HUD aesthetic — inspired by the debt-tracker repo design.
 ### TUI apps (Rofi via Super+D)
 - yazi, pulsemixer, bluetuith, btop, nmtui, lazygit, lazydocker
 
+### Clipboard history (`cliphist`)
+- `wl-paste --watch cliphist store` roda via `98-autostart.conf` (exec no início do sway)
+- `$mod+Shift+p` abre picker: `cliphist list | fzf | cliphist decode | wl-copy`
+- Script em `~/.local/bin/clipboard` (symlink para dotfiles/.local/bin/clipboard)
+
+### Night mode (`wlsunset`)
+- Iniciado via `98-autostart.conf`; parâmetros: 6500K dia → 4000K noite, amanhecer 06:30, anoitecer 18:30
+- Ajuste os horários em `98-autostart.conf` se necessário (sem dependência de geoip)
+
+### Autotiling
+- Iniciado via `98-autostart.conf`; instala via `pip3 install autotiling --user`
+- Divide automaticamente na direção mais longa do container (sem precisar de $mod+b / $mod+v)
+
 ### CLI tools
 - bat, eza, fzf, zoxide, jq, gum, fastfetch, tldr, dua, mpv, imagemagick
+- brightnessctl, playerctl (media keys), wlsunset, cliphist
 
 ### GUI / Flatpak
 - Google Chrome, Obsidian (Flatpak), Spotify (Flatpak)

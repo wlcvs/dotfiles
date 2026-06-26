@@ -20,6 +20,8 @@ Monochromatic HUD aesthetic — only black, white, and gray. No icons, no emojis
 | Bar | Waybar |
 | Notifications | Dunst |
 | Screenshots | Grimshot (grim + slurp) |
+| Clipboard history | cliphist + fzf |
+| Night mode | wlsunset |
 | Audio | PipeWire + pulsemixer |
 | File manager | yazi |
 | Bluetooth | bluetuith |
@@ -84,6 +86,8 @@ ext install wlcvs.quench
 | `fd` | `find` | Fast file finder |
 | `mpv` | — | Media player |
 | `imagemagick` | — | Image processing CLI |
+| `brightnessctl` | — | Backlight control (Fn keys) |
+| `playerctl` | — | Media player control (Fn keys) |
 
 ## Shell Aliases
 
@@ -110,13 +114,29 @@ ext install wlcvs.quench
 | `Super+Shift+C` | Reload config |
 | `Super+F` | Fullscreen |
 | `Super+Shift+Space` | Toggle floating |
+| `Super+Space` | Toggle focus tiling/floating |
 | `Super+1..0` | Switch workspace |
 | `Super+Shift+1..0` | Move window to workspace |
+| `Super+Tab` | Last workspace (back and forth) |
+| `Super+N` | First empty workspace |
+| `Alt+Tab` | Next window (all workspaces, cycles through all) |
+| `Alt+Shift+Tab` | Previous window |
 | `Super+H/J/K/L` | Focus (vim-style) |
 | `Super+Shift+H/J/K/L` | Move window |
+| `Super+Arrow` | Focus (arrow keys) |
+| `Super+Shift+Arrow` | Move window (arrow keys) |
 | `Super+B` | Split horizontal |
 | `Super+V` | Split vertical |
-| `Super+R` | Resize mode |
+| `Super+R` | Resize mode (arrows=10px, Shift+arrows=50px, +/-=gaps) |
+| `Super+Minus` | Scratchpad show |
+| `Super+Shift+Minus` | Send to scratchpad |
+| `Super+Shift+B` | Toggle Waybar |
+| `Super+Shift+P` | Clipboard history (cliphist + fzf) |
+| `Super+Shift+D` | Do-not-disturb toggle (dunst) |
+| `Fn volume keys` | Volume up/down/mute (works on lock screen) |
+| `Fn brightness keys` | Brightness up/down (works on lock screen) |
+| `Fn media keys` | Play/pause/next/prev (play works on lock screen) |
+| `Fn touchpad` | Toggle touchpad on/off |
 
 ## Keybindings — Screenshots
 
@@ -126,6 +146,14 @@ ext install wlcvs.quench
 | `Alt+Print` | Active window → clipboard |
 | `Ctrl+Print` | Full screen → clipboard |
 | `Shift+Print` | Full screen → saves to `~/Imagens` |
+
+## Background services (auto-start with Sway)
+
+| Service | Description |
+|---|---|
+| `cliphist` | Clipboard history — stores everything copied via `wl-paste --watch` |
+| `autotiling` | Auto split direction based on container ratio (no manual split needed) |
+| `wlsunset` | Night mode — 6500K day → 4000K night, transitions at 06:30/18:30 |
 
 ## Keybindings — tmux
 
