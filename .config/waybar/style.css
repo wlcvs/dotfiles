@@ -58,9 +58,6 @@ window#waybar {
 }
 
 /* Todos os módulos da direita */
-#cpu,
-#memory,
-#temperature,
 #backlight,
 #pulseaudio,
 #network,
@@ -70,11 +67,6 @@ window#waybar {
     color: #71717a;
     letter-spacing: 0.05em;
     font-size: 10px;
-}
-
-/* Separadores visuais — borda esquerda fina a cada 2 grupos */
-#temperature {
-    border-left: 1px solid #18181b;
 }
 
 #pulseaudio {
