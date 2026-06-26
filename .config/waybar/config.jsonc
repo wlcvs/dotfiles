@@ -11,8 +11,7 @@
         "backlight",
         "pulseaudio",
         "network",
-        "battery",
-        "clock"
+        "battery"
     ],
 
     "sway/workspaces": {
@@ -83,16 +82,23 @@
 
     "clock": {
         "format": "{:%H:%M  %d/%m/%Y}",
-        "tooltip-format": "<tt>{calendar}</tt>",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
-            "mode": "month",
-            "weeks-pos": "",
+            "mode"          : "month",
+            "mode-mon-col"  : 3,
+            "weeks-pos"     : "",
+            "on-scroll"     : 1,
             "format": {
-                "months": "{}",
-                "days": "{}",
+                "months":   "{}",
+                "days":     "{}",
                 "weekdays": "{}",
-                "today": "<b>{}</b>"
+                "today":    "<b>{}</b>"
             }
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-scroll-up":   "shift_up",
+            "on-scroll-down": "shift_down"
         },
         "tooltip": true
     }
