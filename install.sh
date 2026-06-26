@@ -113,6 +113,14 @@ mkdir -p ~/.vscode
 cp "$DOTFILES/.vscode-argv.json" ~/.vscode/argv.json
 
 echo ""
+echo "==> Installing Bibata-Modern-Ice cursor theme..."
+BIBATA_URL=$(curl -fsSL https://api.github.com/repos/ful1e5/Bibata_Cursor/releases/latest | python3 -c "import json,sys; r=json.load(sys.stdin); [print(a['browser_download_url']) for a in r['assets'] if 'Bibata-Modern-Ice.tar.xz' == a['name']]")
+curl -fsSL "$BIBATA_URL" -o /tmp/bibata-ice.tar.xz
+tar -xf /tmp/bibata-ice.tar.xz -C /tmp/
+mkdir -p ~/.local/share/icons
+cp -r /tmp/Bibata-Modern-Ice ~/.local/share/icons/
+
+echo ""
 echo "==> Installing TUI apps not in dnf..."
 # yazi
 curl -fsSL https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-musl.zip -o /tmp/yazi.zip
