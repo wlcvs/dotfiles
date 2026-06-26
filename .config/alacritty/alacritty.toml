@@ -1,6 +1,6 @@
 [terminal.shell]
 program = "/usr/bin/zsh"
-args = ["-c", "tmux has-session -t main 2>/dev/null && tmux new-window -t main && exec tmux attach-session -t main || exec tmux new-session -s main"]
+args = ["-c", "exec tmux new-session"]
 
 [font]
 size = 11.0

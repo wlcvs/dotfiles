@@ -1,6 +1,8 @@
 configuration {
-    terminal:       "alacritty";
-    click-to-exit:  true;
+    terminal:           "alacritty";
+    click-to-exit:      true;
+    me-accept-entry:    "MousePrimary";
+    me-select-entry:    "";
 }
 
 @theme "~/.config/rofi/theme.rasi"
