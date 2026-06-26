@@ -148,16 +148,11 @@ class WifiPopup(Gtk.Window):
             Gdk.Screen.get_default(), css,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
+        self.set_size_request(260, -1)
         self._networks = get_networks()
         self._pwd_visible = False
 
         outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-
-        # Header
-        header = Gtk.Label(label='Wi-Fi')
-        header.set_name('header')
-        header.set_halign(Gtk.Align.START)
-        outer.pack_start(header, False, False, 0)
 
         # Network list
         scroll = Gtk.ScrolledWindow()
