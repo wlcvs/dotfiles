@@ -68,10 +68,12 @@ element-text {
     highlight:        bold;
 }
 
-element normal.normal {
-    text-color: @dim;
-}
+element normal.normal  { text-color: @text; }
+element normal.active  { text-color: @text; }
+element normal.urgent  { text-color: @text; }
+element selected.normal { text-color: @text; }
+element selected.active { text-color: @text; }
 
-element selected.normal {
-    text-color: @text;
+configuration {
+    click-to-exit: true;
 }

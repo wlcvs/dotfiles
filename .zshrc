@@ -25,10 +25,10 @@ export TERMINAL=alacritty
 export LANG=pt_BR.UTF-8
 
 # eza (ls moderno)
-alias ls='eza --icons'
-alias ll='eza -lah --icons --git'
-alias la='eza -a --icons'
-alias lt='eza --tree --icons'
+alias ls='eza'
+alias ll='eza -lah --git'
+alias la='eza -a'
+alias lt='eza --tree'
 
 # bat (cat com syntax highlighting)
 alias cat='bat --paging=never'
