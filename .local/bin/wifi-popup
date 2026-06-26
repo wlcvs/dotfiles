@@ -141,7 +141,6 @@ class WifiPopup(Gtk.Window):
         self.add(self.scroll)
 
         self.connect('key-press-event', self._on_key)
-        self.connect('focus-out-event', lambda *_: GLib.timeout_add(150, self._quit))
         self.connect('destroy', self._cleanup)
 
         if self._networks:
