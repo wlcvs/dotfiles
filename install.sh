@@ -23,7 +23,8 @@ sudo pacman -S --needed --noconfirm \
     flatpak \
     fzf ripgrep fd bat jq python-pip \
     lazygit eza zoxide btop mpv imagemagick \
-    pulsemixer github-cli
+    pulsemixer github-cli \
+    keychain xdg-user-dirs
 
 # ── Packages (AUR) ────────────────────────────────────────────────────────────
 
@@ -55,25 +56,19 @@ fi
 # ── Base directories ──────────────────────────────────────────────────────────
 
 info "Creating base directories..."
-mkdir -p \
-    ~/Downloads \
-    ~/Documents \
-    ~/Pictures \
-    ~/Videos \
-    ~/Music \
-    ~/Projects \
-    ~/.local/bin \
-    ~/.config
+xdg-user-dirs-update
+mkdir -p ~/Projects ~/.local/bin ~/.config
 
 # ── Dotfile symlinks ──────────────────────────────────────────────────────────
 
 info "Linking dotfiles..."
-mkdir -p ~/.config/alacritty
+mkdir -p ~/.config/alacritty ~/.ssh
 ln -sf "$DOTFILES/.config/alacritty/alacritty.toml" ~/.config/alacritty/
 
-ln -sf "$DOTFILES/.tmux.conf" ~/
-ln -sf "$DOTFILES/.zshrc"     ~/
-ln -sf "$DOTFILES/.p10k.zsh"  ~/
+ln -sf "$DOTFILES/.tmux.conf"     ~/
+ln -sf "$DOTFILES/.zshrc"         ~/
+ln -sf "$DOTFILES/.p10k.zsh"      ~/
+ln -sf "$DOTFILES/.ssh/config"    ~/.ssh/config
 
 # ── Flatpak apps ──────────────────────────────────────────────────────────────
 
