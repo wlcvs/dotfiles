@@ -119,6 +119,18 @@ else
     skip "Claude Code already installed"
 fi
 
+# ── Docker ────────────────────────────────────────────────────────────────────
+
+info "Installing Docker..."
+sudo pacman -S --needed --noconfirm docker docker-compose
+sudo systemctl enable --now docker
+if ! groups "$USER" | grep -q docker; then
+    sudo usermod -aG docker "$USER"
+    warn "Added $USER to docker group — re-login to take effect"
+else
+    skip "$USER already in docker group"
+fi
+
 # ── nvm ───────────────────────────────────────────────────────────────────────
 
 info "Installing nvm..."
