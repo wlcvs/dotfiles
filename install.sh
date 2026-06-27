@@ -52,6 +52,19 @@ else
     skip "already cloned"
 fi
 
+# ── Base directories ──────────────────────────────────────────────────────────
+
+info "Creating base directories..."
+mkdir -p \
+    ~/Downloads \
+    ~/Documents \
+    ~/Pictures \
+    ~/Videos \
+    ~/Music \
+    ~/Projects \
+    ~/.local/bin \
+    ~/.config
+
 # ── Dotfile symlinks ──────────────────────────────────────────────────────────
 
 info "Linking dotfiles..."
