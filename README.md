@@ -2,7 +2,6 @@
 
 Arch Linux dotfiles — shell, terminal, tools and apps. WM-agnostic.
 
-> Tested on CachyOS. Requires pacman and an AUR helper (paru or yay).
 
 ## Design
 
