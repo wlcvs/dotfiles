@@ -37,7 +37,7 @@
   # Zsh >= 5.1 is required.
   [[ $ZSH_VERSION == (5.<1->*|<6->.*) ]] || return
 
-  # Paleta monocromatica — so preto, branco e cinza
+  # Monochromatic palette — black, white and gray only
   local text='#e4e4e7'
   local muted='#a1a1aa'
   local dim='#71717a'
@@ -73,10 +73,10 @@
   # in Pure that makes prompt drift down whenever you use the Alt-C binding from fzf or similar.
   typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 
-  # Prompt symbol — cinza claro quando OK, cinza escuro quando erro
+  # Prompt symbol — light gray on success, dark gray on error
   typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS}_FOREGROUND=$muted
   typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS}_FOREGROUND=$faint
-  # Simbolos ASCII, sem caracteres especiais
+  # ASCII-only symbols, no special characters
   typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='>'
   typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VICMD_CONTENT_EXPANSION='<'
   typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIVIS_CONTENT_EXPANSION='<'
@@ -124,7 +124,7 @@
   typeset -g POWERLEVEL9K_VCS_{STAGED,UNSTAGED,UNTRACKED}_ICON=
   # Show '*' when there are staged, unstaged or untracked files.
   typeset -g POWERLEVEL9K_VCS_DIRTY_ICON='*'
-  # Texto ASCII para ahead/behind
+  # ASCII text for ahead/behind indicators
   typeset -g POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON=':v'
   typeset -g POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON=':^'
   typeset -g POWERLEVEL9K_VCS_{COMMITS_AHEAD,COMMITS_BEHIND}_MAX_NUM=1

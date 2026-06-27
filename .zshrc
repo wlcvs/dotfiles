@@ -1,9 +1,9 @@
-# Powerlevel10k instant prompt (deve ficar no topo)
+# Powerlevel10k instant prompt (must stay at top)
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Histórico
+# History
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
@@ -14,27 +14,26 @@ autoload -Uz compinit && compinit
 setopt complete_aliases
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-compdef _files ls ll la lt
 
 # PATH
 export PATH="$HOME/.local/bin:$PATH"
 
-# Variáveis de ambiente
+# Environment
 export EDITOR=nvim
 export TERMINAL=alacritty
 export LANG=pt_BR.UTF-8
 
-# eza (ls moderno)
+# eza (modern ls)
 alias ls='eza'
 alias ll='eza -lah --git'
 alias la='eza -a'
 alias lt='eza --tree'
 
-# bat (cat com syntax highlighting)
+# bat (cat with syntax highlighting)
 alias cat='bat --paging=never'
 alias less='bat'
 
-# ferramentas
+# Tools
 alias n='nvim'
 alias vi='nvim'
 alias vim='nvim'
@@ -44,19 +43,18 @@ alias ldk='lazydocker'
 alias du='dua'
 alias fetch='fastfetch'
 
-# fzf - fuzzy finder
-source /usr/share/fzf/shell/key-bindings.zsh 2>/dev/null
-source /usr/share/fzf/shell/completion.zsh 2>/dev/null
+# fzf — fuzzy finder
+source /usr/share/fzf/key-bindings.zsh 2>/dev/null
+source /usr/share/fzf/completion.zsh 2>/dev/null
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# zoxide (cd inteligente)
+# zoxide (smart cd)
 eval "$(zoxide init zsh)"
 alias cd='z'
 
 # Powerlevel10k
 source ~/.config/powerlevel10k/powerlevel10k.zsh-theme
 
-# Configuração do p10k (gerada pelo wizard)
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
