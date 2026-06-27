@@ -2,8 +2,6 @@
 
 Base configuration — shell, terminal, tools and apps. WM-agnostic.
 
-> WM layer: [dotfiles-sway](https://github.com/wlcvs/dotfiles-sway)
-> Editor: [nvim](https://github.com/wlcvs/nvim)
 
 ## Design
 
@@ -46,7 +44,7 @@ Monochromatic — only black, white, and gray. JetBrains Mono system-wide.
 | Google Chrome | Package manager (see below) |
 | Spotify | Flatpak |
 | Obsidian | Flatpak |
-| Claude Code | npm |
+| Claude Code | curl |
 
 ### Other
 | Item | Description |
