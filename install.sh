@@ -23,7 +23,7 @@ sudo pacman -S --needed --noconfirm \
     flatpak \
     fzf ripgrep fd bat jq python-pip \
     lazygit eza zoxide btop mpv imagemagick \
-    python-pulsemixer github-cli
+    pulsemixer github-cli
 
 # ── Packages (AUR) ────────────────────────────────────────────────────────────
 
