@@ -58,6 +58,10 @@ Monochromatic — only black, white, and gray. JetBrains Mono system-wide.
 
 ## Installation
 
+```bash
+git clone https://github.com/wlcvs/dotfiles ~/dotfiles && bash ~/dotfiles/install.sh
+```
+
 ### 1. Install packages for your distro
 
 **Arch**
@@ -104,9 +108,7 @@ sudo dnf install \
 
 ### 2. Run install script
 ```bash
-git clone https://github.com/wlcvs/dotfiles ~/dotfiles
-chmod +x ~/dotfiles/install.sh
-~/dotfiles/install.sh
+git clone https://github.com/wlcvs/dotfiles ~/dotfiles && bash ~/dotfiles/install.sh
 ```
 
 The script handles:
