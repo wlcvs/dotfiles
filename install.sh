@@ -111,5 +111,14 @@ else
     skip "Claude Code already installed"
 fi
 
+# ── nvm ───────────────────────────────────────────────────────────────────────
+
+info "Installing nvm..."
+if [ ! -d "$HOME/.nvm" ]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/HEAD/install.sh | bash
+else
+    skip "nvm already installed"
+fi
+
 echo ""
 info "Done! exec zsh to start."
