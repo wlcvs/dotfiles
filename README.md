@@ -51,8 +51,7 @@ Monochromatic — only black, white, and gray. JetBrains Mono system-wide.
 ### Other
 | Item | Description |
 |---|---|
-| DMZ-White cursor | Classic white cursor, installed to `~/.local/share/icons` |
-| logind ThinkPad config | Lid close → suspend, power key → suspend |
+| DMZ-White cursor | Classic white cursor, installed to `~/.local/share/icons/DMZ-White` |
 
 ---
 
