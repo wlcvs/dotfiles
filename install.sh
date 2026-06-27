@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Base dotfiles — install required packages first (see README), then run this.
+# Base dotfiles — Arch Linux
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -12,6 +12,29 @@ warn()  { echo "    warning: $*"; }
 aur_helper() {
     command -v paru 2>/dev/null || command -v yay 2>/dev/null || echo ""
 }
+
+# ── Packages (pacman) ─────────────────────────────────────────────────────────
+
+info "Installing pacman packages..."
+sudo pacman -S --needed --noconfirm \
+    alacritty tmux zsh git curl unzip \
+    ttf-jetbrains-mono \
+    nodejs npm \
+    flatpak \
+    fzf ripgrep fd bat jq python-pip \
+    lazygit eza zoxide btop mpv imagemagick \
+    python-pulsemixer github-cli
+
+# ── Packages (AUR) ────────────────────────────────────────────────────────────
+
+info "Installing AUR packages..."
+AUR=$(aur_helper)
+if [ -n "$AUR" ]; then
+    "$AUR" -S --needed --noconfirm \
+        yazi lazydocker gum dua-cli fastfetch tldr bluetuith
+else
+    warn "No AUR helper found (paru/yay) — install one first, then re-run"
+fi
 
 # ── Shell ─────────────────────────────────────────────────────────────────────
 
@@ -39,57 +62,6 @@ ln -sf "$DOTFILES/.tmux.conf" ~/
 ln -sf "$DOTFILES/.zshrc"     ~/
 ln -sf "$DOTFILES/.p10k.zsh"  ~/
 
-# ── yazi (file manager) ───────────────────────────────────────────────────────
-
-info "Installing yazi..."
-if ! command -v yazi &>/dev/null; then
-    if command -v pacman &>/dev/null; then
-        AUR=$(aur_helper)
-        if [ -n "$AUR" ]; then
-            "$AUR" -S --needed --noconfirm yazi
-        else
-            warn "No AUR helper found — install yazi manually or install paru/yay first"
-        fi
-    else
-        ARCH=$(uname -m)
-        case "$ARCH" in
-            x86_64)  YAZI_ARCH="x86_64-unknown-linux-musl" ;;
-            aarch64) YAZI_ARCH="aarch64-unknown-linux-musl" ;;
-            *)       warn "Unsupported arch $ARCH for yazi binary download"; YAZI_ARCH="" ;;
-        esac
-        if [ -n "$YAZI_ARCH" ]; then
-            curl -fsSL "https://github.com/sxyazi/yazi/releases/latest/download/yazi-${YAZI_ARCH}.zip" \
-                -o /tmp/yazi.zip
-            unzip -o /tmp/yazi.zip -d /tmp/yazi-extract/
-            mkdir -p ~/.local/bin
-            cp /tmp/yazi-extract/yazi-${YAZI_ARCH}/yazi ~/.local/bin/
-            cp /tmp/yazi-extract/yazi-${YAZI_ARCH}/ya   ~/.local/bin/
-            chmod +x ~/.local/bin/yazi ~/.local/bin/ya
-            rm -rf /tmp/yazi.zip /tmp/yazi-extract
-        fi
-    fi
-else
-    skip "yazi already installed"
-fi
-
-# ── pulsemixer (audio mixer) ──────────────────────────────────────────────────
-
-info "Installing pulsemixer..."
-if ! command -v pulsemixer &>/dev/null; then
-    if command -v pacman &>/dev/null; then
-        sudo pacman -S --needed --noconfirm python-pulsemixer
-    elif command -v apt-get &>/dev/null; then
-        sudo apt-get install -y python3-pulsemixer 2>/dev/null || \
-            pip3 install pulsemixer --user --break-system-packages 2>/dev/null || \
-            pip3 install pulsemixer --user
-    else
-        pip3 install pulsemixer --user --break-system-packages 2>/dev/null || \
-            pip3 install pulsemixer --user
-    fi
-else
-    skip "pulsemixer already installed"
-fi
-
 # ── Flatpak apps ──────────────────────────────────────────────────────────────
 
 info "Installing Flatpak apps..."
@@ -106,23 +78,11 @@ fi
 
 info "Installing Google Chrome..."
 if ! command -v google-chrome-stable &>/dev/null && ! command -v google-chrome &>/dev/null; then
-    if command -v pacman &>/dev/null; then
-        AUR=$(aur_helper)
-        if [ -n "$AUR" ]; then
-            "$AUR" -S --needed google-chrome
-        else
-            warn "No AUR helper found — install google-chrome from AUR manually"
-        fi
-    elif command -v apt-get &>/dev/null; then
-        curl -fsSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-            -o /tmp/chrome.deb
-        sudo apt install -y /tmp/chrome.deb
-        rm -f /tmp/chrome.deb
-    elif command -v dnf &>/dev/null; then
-        sudo dnf install -y \
-            https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+    AUR=$(aur_helper)
+    if [ -n "$AUR" ]; then
+        "$AUR" -S --needed --noconfirm google-chrome
     else
-        warn "Unknown distro — download Chrome from https://google.com/chrome"
+        warn "No AUR helper found — install google-chrome from AUR manually"
     fi
 else
     skip "Chrome already installed"
@@ -132,26 +92,11 @@ fi
 
 info "Installing VS Code..."
 if ! command -v code &>/dev/null; then
-    if command -v pacman &>/dev/null; then
-        AUR=$(aur_helper)
-        if [ -n "$AUR" ]; then
-            "$AUR" -S --needed --noconfirm visual-studio-code-bin
-        else
-            warn "No AUR helper found — install visual-studio-code-bin from AUR manually"
-        fi
-    elif command -v apt-get &>/dev/null; then
-        curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
-            | sudo gpg --dearmor -o /usr/share/keyrings/packages.microsoft.gpg
-        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg] \
-https://packages.microsoft.com/repos/code stable main" \
-            | sudo tee /etc/apt/sources.list.d/vscode.list
-        sudo apt-get update && sudo apt-get install -y code
-    elif command -v dnf &>/dev/null; then
-        sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-        sudo dnf install -y \
-            https://packages.microsoft.com/yumrepos/vscode/code-latest-x86_64.rpm
+    AUR=$(aur_helper)
+    if [ -n "$AUR" ]; then
+        "$AUR" -S --needed --noconfirm visual-studio-code-bin
     else
-        warn "Unknown distro — download VS Code from https://code.visualstudio.com"
+        warn "No AUR helper found — install visual-studio-code-bin from AUR manually"
     fi
 else
     skip "VS Code already installed"
@@ -161,17 +106,10 @@ fi
 
 info "Installing Claude Code..."
 if ! command -v claude &>/dev/null; then
-    if command -v npm &>/dev/null; then
-        npm install -g @anthropic-ai/claude-code
-    else
-        warn "npm not found — install Node.js first, then: npm install -g @anthropic-ai/claude-code"
-    fi
+    curl -fsSL https://claude.ai/install.sh | sh
 else
     skip "Claude Code already installed"
 fi
 
 echo ""
-info "Done! Next steps:"
-echo "    1. git clone https://github.com/wlcvs/nvim ~/.config/nvim"
-echo "    2. Install WM layer: dotfiles-sway"
-echo "    3. exec zsh"
+info "Done! exec zsh to start."

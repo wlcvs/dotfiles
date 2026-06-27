@@ -78,59 +78,19 @@ yay -S --needed \
   btop bluetuith
 ```
 
-**Debian / Ubuntu**
-```bash
-sudo apt install \
-  alacritty tmux zsh git curl unzip \
-  fonts-jetbrains-mono \
-  nodejs npm \
-  flatpak \
-  fzf ripgrep fd-find bat jq python3-pip \
-  btop
-
-# lazygit, lazydocker, zoxide, gum, dua-cli, fastfetch, tldr: install from GitHub releases
-# bluetuith: install from https://github.com/bluetuith-org/bluetuith/releases
-```
-
-**Fedora**
-```bash
-sudo dnf install \
-  alacritty tmux zsh git curl unzip \
-  jetbrains-mono-fonts \
-  nodejs npm \
-  flatpak \
-  fzf ripgrep fd-find bat jq python3-pip \
-  lazygit btop
-
-# lazydocker, zoxide, gum, dua-cli, fastfetch, bluetuith: install from GitHub releases or COPR
-```
-
 ### 2. Run install script
 ```bash
 git clone https://github.com/wlcvs/dotfiles ~/dotfiles && bash ~/dotfiles/install.sh
 ```
 
 The script handles:
+- Installs all packages via pacman and AUR helper (paru/yay)
 - Powerlevel10k clone
-- DMZ-White cursor theme
 - Symlinking shell/terminal configs
-- yazi (binary download)
-- pulsemixer (pip)
 - Flatpak: Spotify, Obsidian
-- Google Chrome (detects Arch/Debian/Fedora)
-- Claude Code (npm)
-
-### 3. Neovim config
-```bash
-git clone https://github.com/wlcvs/nvim ~/.config/nvim
-nvim  # plugins install on first launch
-```
-
-### 4. WM layer
-```bash
-git clone https://github.com/wlcvs/dotfiles-sway ~/dotfiles-sway
-~/dotfiles-sway/install.sh
-```
+- Google Chrome (AUR)
+- VS Code (AUR)
+- Claude Code (curl installer)
 
 ## Shell aliases
 
