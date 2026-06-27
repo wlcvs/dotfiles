@@ -1,4 +1,4 @@
-# WM-specific — in separate repos (dotfiles-sway, dotfiles-qtile)
+# WM-specific — in separate repo (dotfiles-sway)
 .config/sway/
 .config/swaylock/
 .config/swaynag/

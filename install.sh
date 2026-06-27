@@ -93,5 +93,5 @@ fi
 echo ""
 echo "==> Done! Next steps:"
 echo "    1. git clone https://github.com/wlcvs/nvim ~/.config/nvim  (Neovim)"
-echo "    2. Install WM layer: dotfiles-sway or dotfiles-qtile"
+echo "    2. Install WM layer: dotfiles-sway"
 echo "    3. exec zsh  (reload shell)"

@@ -2,7 +2,7 @@
 
 Base configuration — shell, terminal, tools and apps. WM-agnostic.
 
-> WM layers: [dotfiles-sway](https://github.com/wlcvs/dotfiles-sway) · [dotfiles-qtile](https://github.com/wlcvs/dotfiles-qtile)
+> WM layer: [dotfiles-sway](https://github.com/wlcvs/dotfiles-sway)
 > Editor: [nvim](https://github.com/wlcvs/nvim)
 
 ## Design
@@ -128,11 +128,6 @@ nvim  # plugins install on first launch
 
 ### 4. WM layer
 ```bash
-# Qtile (CachyOS / Arch)
-git clone https://github.com/wlcvs/dotfiles-qtile ~/dotfiles-qtile
-~/dotfiles-qtile/install.sh
-
-# or Sway
 git clone https://github.com/wlcvs/dotfiles-sway ~/dotfiles-sway
 ~/dotfiles-sway/install.sh
 ```

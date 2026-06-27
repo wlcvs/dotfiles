@@ -9,8 +9,7 @@ Target machine: CachyOS (Arch-based). WM-specific layers are separate repos.
 |---|---|
 | `wlcvs/dotfiles` | **This repo** — shell, terminal, editor tools, base configs |
 | `wlcvs/nvim` | Neovim config (standalone) |
-| `wlcvs/dotfiles-sway` | Sway WM layer (Fedora 44 archive) |
-| `wlcvs/dotfiles-qtile` | Qtile WM layer (CachyOS, active) |
+| `wlcvs/dotfiles-sway` | Sway WM layer |
 
 ## Design system
 
@@ -67,10 +66,6 @@ Monochromatic HUD aesthetic.
 - `volume-tui` — curses volume control using wpctl (WM-agnostic)
 - `power-profile` — tuned-ppd / power-profiles-daemon cycle via busctl
 
-### System (`system/`)
-- `logind-thinkpad.conf` → `/etc/systemd/logind.conf.d/thinkpad.conf`
-  - Lid close → suspend, power key → suspend
-  - ThinkPad-specific, but not WM-specific
 
 ## How this repo works
 
@@ -83,5 +78,5 @@ Monochromatic HUD aesthetic.
 
 - After theme changes: `pkill dunst && dunst &` to reload dunst
 - `lazy-lock.json` excluded via `.config/nvim/.gitignore` (nvim repo)
-- `clipboard` script uses `wl-copy` — for X11 Qtile, change to `xclip -sel clip`
+- `clipboard` script uses `wl-copy` (Wayland/Sway)
 - DMZ-White cursor installed to `~/.local/share/icons/` (not packaged in Arch)
