@@ -43,10 +43,6 @@ Monochromatic HUD aesthetic.
 - All 16 ANSI colors remapped to zinc grayscale
 - Reuses tmux session "main" via `tmux new-window`
 
-### Neovim
-- Lives in `wlcvs/nvim` (separate repo)
-- Install: `git clone https://github.com/wlcvs/nvim ~/.config/nvim`
-
 ### Dunst (`~/.config/dunst/dunstrc`)
 - No icons, monochromatic, top-right, no rounded corners
 
@@ -62,7 +58,7 @@ Monochromatic HUD aesthetic.
 - `.config/Code/argv.json` is NOT tracked here (use `~/.vscode/argv.json`)
 
 ### Scripts (`~/.local/bin/`)
-- `clipboard` — cliphist + fzf + wl-copy (Wayland; swap wl-copy→xclip for X11)
+- `clipboard` — cliphist + fzf + wl-copy
 - `volume-tui` — curses volume control using wpctl (WM-agnostic)
 - `power-profile` — tuned-ppd / power-profiles-daemon cycle via busctl
 
@@ -77,6 +73,4 @@ Monochromatic HUD aesthetic.
 ## Notes
 
 - After theme changes: `pkill dunst && dunst &` to reload dunst
-- `lazy-lock.json` excluded via `.config/nvim/.gitignore` (nvim repo)
-- `clipboard` script uses `wl-copy` (Wayland/Sway)
 - DMZ-White cursor installed to `~/.local/share/icons/` (not packaged in Arch)
