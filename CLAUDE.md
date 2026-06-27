@@ -1,7 +1,7 @@
 # CLAUDE.md — dotfiles (base)
 
-Base dotfiles for wlcsv — WM-agnostic configs.
-Target machine: CachyOS (Arch-based). WM-specific layers are separate repos.
+Arch Linux dotfiles for wlcsv — WM-agnostic configs.
+Target machine: CachyOS. Requires pacman + AUR helper (paru/yay).
 
 ## Repositories
 
