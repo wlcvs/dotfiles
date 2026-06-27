@@ -54,28 +54,6 @@ Monochromatic — only black, white, and gray. JetBrains Mono system-wide.
 git clone https://github.com/wlcvs/dotfiles ~/dotfiles && bash ~/dotfiles/install.sh
 ```
 
-### 1. Install packages for your distro
-
-**Arch**
-```bash
-sudo pacman -S --needed \
-  alacritty tmux zsh git curl unzip \
-  ttf-jetbrains-mono \
-  nodejs npm \
-  flatpak \
-  fzf ripgrep fd bat jq python-pip \
-  lazygit
-
-yay -S --needed \
-  lazydocker zoxide gum dua-cli fastfetch tldr mpv imagemagick \
-  btop bluetuith
-```
-
-### 2. Run install script
-```bash
-git clone https://github.com/wlcvs/dotfiles ~/dotfiles && bash ~/dotfiles/install.sh
-```
-
 The script handles:
 - Installs all packages via pacman and AUR helper (paru/yay)
 - Powerlevel10k clone
