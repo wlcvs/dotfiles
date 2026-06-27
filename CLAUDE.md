@@ -50,7 +50,7 @@ Monochromatic HUD aesthetic.
 - Minimal zinc popup, no icons, used for app launcher and clipboard
 
 ### GTK (`~/.config/gtk-3.0/`, `~/.config/gtk-4.0/`)
-- Dark mode, DMZ-White cursor
+- Dark mode
 
 ### VS Code
 - Theme: QUENCH (monochromatic)
@@ -73,4 +73,3 @@ Monochromatic HUD aesthetic.
 ## Notes
 
 - After theme changes: `pkill dunst && dunst &` to reload dunst
-- DMZ-White cursor installed to `~/.local/share/icons/` (not packaged in Arch)

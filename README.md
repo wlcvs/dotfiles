@@ -46,11 +46,6 @@ Monochromatic — only black, white, and gray. JetBrains Mono system-wide.
 | Obsidian | Flatpak |
 | Claude Code | curl |
 
-### Other
-| Item | Description |
-|---|---|
-| DMZ-White cursor | Classic white cursor, installed to `~/.local/share/icons/DMZ-White` |
-
 ---
 
 ## Installation
